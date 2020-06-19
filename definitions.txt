@@ -1,0 +1,7 @@
+--priority queue
+void *(*const top)(void *)
+void (*const push)(void *, void *)
+void (*const pop)(void *)
+void (*const update_top)(void *)
+----mergeable
+void (*const merge)(void *, void *, void *) 
