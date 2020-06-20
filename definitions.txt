@@ -3,7 +3,7 @@ void *(*const top)(void *)
 void (*const push)(void *, void *)
 void (*const pop)(void *)
 void (*const update_top)(void *)
-size_t size
+size_t (*const size)(void *)
 ----static_priority_queue
 ----mergeable_priority_queue
 void (*const merge)(void *, void *, void *) 
