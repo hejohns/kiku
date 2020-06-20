@@ -129,7 +129,7 @@ static inline bheap bheap_init(
     };
 }
 
-static void bheap_free(bheap *pq){
+static inline void bheap_free(bheap *pq){
     free(pq->arr);
     pq->arr = NULL;
     pq->size = 0;
