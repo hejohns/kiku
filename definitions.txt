@@ -16,3 +16,5 @@ void *(*const prev)(void *)
 void *(*const tail)(void *)
 ------random_access_container
 void *(*const at)(void *, size_t)
+--simple_random_access_container
+void *(*const at)(void *, size_t)
