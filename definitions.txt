@@ -7,11 +7,12 @@ size_t (*const size)(void *)
 ----static_priority_queue
 ----mergeable_priority_queue
 void (*const merge)(void *, void *, void *) 
---sequence_container
+--directional_container
 void *(*const begin)(void *)
 void *(*const end)(void *)
-void *(*const tail)(void *)
 void *(*const next)(void *)
+----bidirectional_container
 void *(*const prev)(void *)
-----random_access_container
+void *(*const tail)(void *)
+------random_access_container
 void *(*const at)(void *, size_t)
