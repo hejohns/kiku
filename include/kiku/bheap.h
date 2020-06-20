@@ -136,7 +136,7 @@ static void bheap_free(bheap *pq){
     pq->capacity = 0;
 }
 
-static void bheap_make_heap(bheap *pq){
+static inline void bheap_make_heap(bheap *pq){
     /* Floyd's heap algorithm */
     /* O(size) */
     if(pq->size <= 1){
@@ -150,7 +150,7 @@ static void bheap_make_heap(bheap *pq){
     bheap_siftDown(pq, 0);
 }
 
-static void heapsort(void *base, size_t nmemb, size_t size,
+static inline void heapsort(void *base, size_t nmemb, size_t size,
         bool (*const less)(void *, void *)){
     bheap tmp = {
         .arr = base,
