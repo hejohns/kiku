@@ -71,10 +71,13 @@ static void bheap_push_internal(bheap *pq, const void *value){
 
 static void bheap_pop_internal(bheap *pq){
     /* O(log size) */
-    if(pq->size > 0){
-        memcpy((char *)pq->arr, (char *)pq->arr + (pq->size-1), pq->elt_size);
+    if(pq->size > 1){
+        memcpy((char *)pq->arr, (char *)pq->arr + (pq->size-1)*pq->elt_size, pq->elt_size);
         pq->size--;
         bheap_siftDown(pq, 0);
+    }
+    else if(pq->size == 1){
+        pq->size--;
     }
     else{
         exit(EXIT_FAILURE); //Can't pop from an empty heap
