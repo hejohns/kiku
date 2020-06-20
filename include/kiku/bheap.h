@@ -152,7 +152,12 @@ static void bheap_make_heap(bheap *pq){
 
 static void heapsort(void *base, size_t nmemb, size_t size,
         bool (*const less)(void *, void *)){
-    bheap tmp = {.arr = base, .less = less, .elt_size = size, .size = nmemb};
+    bheap tmp = {
+        .arr = base,
+        .less = less,
+        .elt_size = size,
+        .size = nmemb
+    };
     bheap_make_heap(&tmp);
     for(size_t i=nmemb-1; i > 0; i--){
         memswp((char *)tmp.arr + i*tmp.elt_size, (char *)tmp.arr, tmp.elt_size);
