@@ -6,7 +6,7 @@ static bool less_int(void *restrict left, void *restrict right){
 }
 
 static void push_into_pq(void *restrict pq, void *restrict value){
-    (*((struct priority_queue **)pq))->push(pq, value);
+    (*(struct priority_queue **)pq)->push(pq, value);
 }
 
 int main(){
