@@ -1,5 +1,5 @@
 CC := clang
-CFLAGS := -std=c11 -Wpedantic -Wall -ggdb -O0
+CFLAGS := -std=c11 -Wpedantic -Wall -Wextra -ggdb -O0
 
 export CPATH := ../include:
 
