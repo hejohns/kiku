@@ -10,11 +10,9 @@ void (*const merge)(void *, void *, void *)
 --directional_container
 void *(*const begin)(void *)
 void *(*const end)(void *)
-void *(*const next)(void *)
+void *(*const next)(void *, void *)
 ----bidirectional_container
-void *(*const prev)(void *)
+void *(*const prev)(void *, void *)
 void *(*const tail)(void *)
-------random_access_container
-void *(*const at)(void *, size_t)
---simple_random_access_container
+--random_access_container
 void *(*const at)(void *, size_t)
