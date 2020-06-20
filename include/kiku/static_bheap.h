@@ -7,7 +7,7 @@
 
 typedef bheap static_bheap;
 
-static void static_bheap_push_internal(bheap *pq, void *value){
+static void static_bheap_push_internal(static_bheap *pq, void *value){
     if(!(pq->size < pq->capacity)){
         exit(EXIT_FAILURE); //can't grow statically allocated storage
     }
@@ -20,11 +20,8 @@ static void static_bheap_push(void *pq, void *value){
     static_bheap_push_internal(pq, value);
 }
 
-struct static_bheap_vtable{
-    struct static_priority_queue static_priority_queue;
-};
-static struct static_bheap_vtable static_bheap_vtable = {
-    .static_priority_queue = {
+static struct bheap_vtable static_bheap_vtable = {
+    .priority_queue = {
         .top = bheap_top,
         .push = static_bheap_push,
         .pop = bheap_pop,
@@ -43,8 +40,14 @@ static inline static_bheap static_bheap_init(
         .arr = arr,
         .less = less,
         .size = 0,
+        .elt_size = elt_size,
         .capacity = size
     };
+}
+
+static void static_bheap_free(static_bheap *pq){
+    // do nothing
+    (void)pq;
 }
 
 #endif /* STATIC_BHEAP_H */
