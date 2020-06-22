@@ -21,7 +21,7 @@ static void static_bheap_push(void *pq, void *value){
 }
 
 static struct bheap_vtable static_bheap_vtable = {
-    .priority_queue = {
+    .PriorityQueue = {
         .top = bheap_top,
         .push = static_bheap_push,
         .pop = bheap_pop,

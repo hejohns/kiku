@@ -23,12 +23,19 @@ crash extremely quickly.
 All function pointers are const to reduce accidental
 corruption.
 
-Note that type requirements always begin with an uppercase
-letter such as:
+
+**Naming rules**
+
+Type requirements always begin with an uppercase letter
+such as
 OneTwoThree
 while realized types always begin with a lowercase letter
-such as:
+such as
 oneTwoThree
 
-Standard type functions follow the format:
+Standard type functions follow the format
 TypeRequirement_functionName()
+
+Type requirements are are not realized types.
+To avoid using the same namespace,
+DO NOT TYPEDEF TYPE REQUIREMENTS.

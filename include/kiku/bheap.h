@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <kiku/common.h>
-#include <kiku/priority_queue.h>
+#include <kiku/PriorityQueue.h>
 
 typedef struct bheap{
     void *const vtable; //initialize to bheap_vtable
@@ -101,10 +101,10 @@ static size_t bheap_size(void *pq){
 }
 
 struct bheap_vtable{
-    struct priority_queue priority_queue;
+    struct PriorityQueue PriorityQueue;
 };
 static struct bheap_vtable bheap_vtable = {
-    .priority_queue = {
+    .PriorityQueue = {
         .top = bheap_top,
         .push = bheap_push,
         .pop = bheap_pop,
