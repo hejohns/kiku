@@ -2,7 +2,7 @@
 #ifndef BIDIRECTIONALCONTAINER_H
 #define BIDIRECTIONALCONTAINER_H
 
-#include "DirectionalContainer.h"
+#include <kiku/DirectionalContainer.h>
 
 struct BidirectionalContainer{
     struct DirectionalContainer;

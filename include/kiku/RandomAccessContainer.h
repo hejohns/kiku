@@ -2,7 +2,7 @@
 #ifndef RANDOMACCESSCONTAINER_H
 #define RANDOMACCESSCONTAINER_H
 
-#include "BidirectionalContainer.h"
+#include <kiku/BidirectionalContainer.h>
 
 struct RandomAccessContainer{
     struct BidirectionalContainer;
