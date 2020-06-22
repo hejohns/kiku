@@ -17,6 +17,41 @@ typedef struct bheap{
     size_t capacity;
 } bheap;
 
+/* forward declare internal functions called by type required interface */
+void bheap_push_internal(bheap *pq, void *value);
+void bheap_pop_internal(bheap *pq);
+void bheap_siftDown(bheap *pq, size_t index);
+
+static void *bheap_top(void *pq){
+    return (((bheap *)pq)->size) ? ((bheap *)pq)->arr : exit(EXIT_FAILURE);
+}
+static void bheap_push(void *pq, void *value){
+    bheap_push_internal((bheap *)pq, value);
+}
+static void bheap_pop(void *pq){
+    bheap_pop_internal((bheap *)pq);
+}
+static void bheap_updateTop(void *pq){
+    bheap_siftDown((bheap *)pq, 0);
+}
+static size_t bheap_size(void *pq){
+    return ((bheap *)pq)->size;
+}
+
+struct bheap_vtable{
+    struct PriorityQueue PriorityQueue;
+};
+static struct bheap_vtable bheap_vtable = {
+    .PriorityQueue = {
+        .top = bheap_top,
+        .push = bheap_push,
+        .pop = bheap_pop,
+        .updateTop = bheap_updateTop,
+        .size = bheap_size
+    }
+};
+/* begin internal implementation details */
+
 #define BHEAP_GROWTH_FACTOR 2
 
 static void bheap_siftDown(bheap *pq, size_t index){
@@ -77,41 +112,12 @@ static void bheap_pop_internal(bheap *pq){
         bheap_siftDown(pq, 0);
     }
     else if(pq->size == 1){
-        pq->size--;
+        pq->size--; //prevent wrap around
     }
     else{
         exit(EXIT_FAILURE); //Can't pop from an empty heap
     }
 }
-
-static void *bheap_top(void *pq){
-    return ((bheap *)pq)->arr;
-}
-static void bheap_push(void *pq, void *value){
-    bheap_push_internal((bheap *)pq, value);
-}
-static void bheap_pop(void *pq){
-    bheap_pop_internal((bheap *)pq);
-}
-static void bheap_update_top(void *pq){
-    bheap_siftDown((bheap *)pq, 0);
-}
-static size_t bheap_size(void *pq){
-    return ((bheap *)pq)->size;
-}
-
-struct bheap_vtable{
-    struct PriorityQueue PriorityQueue;
-};
-static struct bheap_vtable bheap_vtable = {
-    .PriorityQueue = {
-        .top = bheap_top,
-        .push = bheap_push,
-        .pop = bheap_pop,
-        .update_top = bheap_update_top,
-        .size = bheap_size
-    }
-};
 
 static inline bheap bheap_init(
         bool (*const less)(void *, void *),

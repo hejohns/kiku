@@ -6,7 +6,7 @@ struct PriorityQueue{
     void *(*const top)(void *);
     void (*const push)(void *, void *);
     void (*const pop)(void *);
-    void (*const update_top)(void *);
+    void (*const updateTop)(void *);
     size_t (*const size)(void *);
 };
 
@@ -19,7 +19,7 @@ static inline void PriorityQueue_push(void *pq, void *value){
 static inline void PriorityQueue_pop(void *pq){
     (*(struct PriorityQueue **)pq)->pop(pq);
 }
-static inline void PriorityQueue_update_top(void *pq){
+static inline void PriorityQueue_updateTop(void *pq){
     (*(struct PriorityQueue **)pq)->update_top(pq);
 }
 static inline size_t PriorityQueue_size(void *pq){

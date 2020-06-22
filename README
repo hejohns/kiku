@@ -39,3 +39,11 @@ TypeRequirement_functionName()
 Type requirements are are not realized types.
 To avoid using the same namespace,
 DO NOT TYPEDEF TYPE REQUIREMENTS.
+
+Realized types must provide a _init() inline function
+that returns the same type, and a _free() inline function
+that properly deallocated resources captured in _init().
+i.e. all type instances must be able to be declared as
+type type_inst = type_init(...);
+and deallocated as
+type_free(&type_inst);
