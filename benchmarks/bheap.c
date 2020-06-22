@@ -15,11 +15,11 @@ int main(){
     for(size_t i=0; i<sz; i++){
         tmp = rand()%100;
         printf("pushed: %d\n", tmp);
-        priority_queue_push(&inst, &tmp);
+        PriorityQueue_push(&inst, &tmp);
     }
     for(size_t i=0; i<sz; i++){
-        printf("top: %d\n", *(int *)(priority_queue_top(&inst)));
-        priority_queue_pop(&inst);
+        printf("top: %d\n", *(int *)(PriorityQueue_top(&inst)));
+        PriorityQueue_pop(&inst);
     }
     bheap_free(&inst);
     return 0;

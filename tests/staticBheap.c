@@ -1,12 +1,13 @@
 #include <kiku/common.h>
-#include <kiku/bheap.h>
+#include <kiku/staticBheap.h>
 
 static bool less_int(void *restrict left, void *restrict right){
     return *(int *)left < *(int*)right;
 }
 
 int main(){
-    bheap inst = bheap_init(less_int, 16, sizeof(int));
+    int array[16];
+    staticBheap inst = staticBheap_init(less_int, 16, sizeof(int), array);
     int tmp;
     tmp = 6, PriorityQueue_push(&inst, &tmp);
     tmp = 3, PriorityQueue_push(&inst, &tmp);
@@ -16,6 +17,6 @@ int main(){
     tmp = 8, PriorityQueue_push(&inst, &tmp);
     tmp = 0, PriorityQueue_push(&inst, &tmp);
     tmp = 4, PriorityQueue_push(&inst, &tmp);
-    bheap_free(&inst);
+    staticBheap_free(&inst);
     return 0;
 }

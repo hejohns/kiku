@@ -20,7 +20,7 @@ static inline void PriorityQueue_pop(void *pq){
     (*(struct PriorityQueue **)pq)->pop(pq);
 }
 static inline void PriorityQueue_updateTop(void *pq){
-    (*(struct PriorityQueue **)pq)->update_top(pq);
+    (*(struct PriorityQueue **)pq)->updateTop(pq);
 }
 static inline size_t PriorityQueue_size(void *pq){
     return (*(struct PriorityQueue **)pq)->size(pq);

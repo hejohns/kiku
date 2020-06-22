@@ -18,12 +18,12 @@ typedef struct bheap{
 } bheap;
 
 /* forward declare internal functions called by type required interface */
-void bheap_push_internal(bheap *pq, void *value);
-void bheap_pop_internal(bheap *pq);
-void bheap_siftDown(bheap *pq, size_t index);
+static void bheap_push_internal(bheap *pq, const void *value);
+static void bheap_pop_internal(bheap *pq);
+static void bheap_siftDown(bheap *pq, size_t index);
 
 static void *bheap_top(void *pq){
-    return (((bheap *)pq)->size) ? ((bheap *)pq)->arr : exit(EXIT_FAILURE);
+    return (((bheap *)pq)->size) ? ((bheap *)pq)->arr : (exit(EXIT_FAILURE), (void *)0);
 }
 static void bheap_push(void *pq, void *value){
     bheap_push_internal((bheap *)pq, value);
@@ -143,36 +143,6 @@ static inline void bheap_free(bheap *pq){
     pq->arr = NULL;
     pq->size = 0;
     pq->capacity = 0;
-}
-
-static inline void bheap_make_heap(bheap *pq){
-    /* Floyd's heap algorithm */
-    /* O(size) */
-    if(pq->size <= 1){
-        return;
-    }
-    size_t height = 0;
-    for(size_t sz = pq->size >> 1; sz; height++, sz >>= 1){}
-    for(size_t i=(1<<height)-2; i > 0; i--){
-        bheap_siftDown(pq, i);
-    }
-    bheap_siftDown(pq, 0);
-}
-
-static inline void heapsort(void *base, size_t nmemb, size_t size,
-        bool (*const less)(void *, void *)){
-    bheap tmp = {
-        .arr = base,
-        .less = less,
-        .elt_size = size,
-        .size = nmemb
-    };
-    bheap_make_heap(&tmp);
-    for(size_t i=nmemb-1; i > 0; i--){
-        memswp((char *)tmp.arr + i*tmp.elt_size, (char *)tmp.arr, tmp.elt_size);
-        tmp.size--;
-        bheap_siftDown(&tmp, 0);
-    }
 }
 
 #endif /* BHEAP_H */
