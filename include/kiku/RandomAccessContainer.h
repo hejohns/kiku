@@ -18,8 +18,11 @@ static inline void *BidirectionalContainer_end(void *cont){
 static inline void *RandomAccessContainer_next(void *cont, void *node){
     return (*(struct DirectionalContainer **)cont)->next(cont, node);
 }
-static inline size_t BidirectionalContainer_size(void *cont){
+static inline size_t RandomAccessContainer_size(void *cont){
     return (*(struct DirectionalContainer **)cont)->size(cont);
+}
+static inline void RandomAccessContainer_pushBack(void *cont, void *value){
+    (*(struct DirectionalContainer **)cont)->pushBack(cont, value);
 }
 static inline void *RandomAccessContainer_prev(void *cont, void *node){
     return (*(struct BidirectionalContainer **)cont)->prev(cont, node);

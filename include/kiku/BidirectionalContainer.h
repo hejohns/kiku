@@ -22,6 +22,9 @@ static inline void *BidirectionalContainer_next(void *cont, void *node){
 static inline size_t BidirectionalContainer_size(void *cont){
     return (*(struct DirectionalContainer **)cont)->size(cont);
 }
+static inline void BidirectionalContainer_pushBack(void *cont, void *value){
+    (*(struct DirectionalContainer **)cont)->pushBack(cont, value);
+}
 static inline void *BidirectionalContainer_prev(void *cont, void *node){
     return (*(struct BidirectionalContainer **)cont)->prev(cont, node);
 }
