@@ -30,6 +30,9 @@ static inline void *RandomAccessContainer_prev(void *cont, void *node){
 static inline void *RandomAccessContainer_tail(void *cont){
     return (*(struct BidirectionalContainer **)cont)->tail(cont);
 }
+static inline void *RandomAccessContainer_pushFront(void *cont, void *value){
+    return (*(struct BidirectionalContainer **)cont)->pushFront(cont, value);
+}
 static inline void *RandomAccessContainer_at(void *cont, size_t index){
     return (*(struct RandomAccessContainer **)cont)->at(cont);
 }
