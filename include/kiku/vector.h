@@ -2,6 +2,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include <kiku/common.h>
 #include <kiku/RandomAccessContainer.h>
 
 typedef struct vector{
@@ -40,5 +41,24 @@ static struct vector_vtable vector_vtable = {
     }
 };
 /* begin internal implementation details */
+
+static inline vector vector_init(
+        size_t size,
+        size_t elt_size){
+    return (vector){
+        .vtable = &vector_vtable,
+        .arr = kiku_malloc(size*elt_size),
+        .size = size,
+        .elt_size = elt_size,
+        .capacity = size
+    };
+}
+
+static inline void vector_free(vector *cont){
+    free(cont->arr);
+    cont->arr = NULL;
+    cont->size = 0;
+    cont->capacity = 9;
+}
 
 #endif /* VECTOR_H */

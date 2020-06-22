@@ -54,6 +54,28 @@ static struct bheap_vtable bheap_vtable = {
 
 #define BHEAP_GROWTH_FACTOR 2
 
+static inline bheap bheap_init(
+        bool (*const less)(void *, void *),
+        size_t size,
+        size_t elt_size
+        ){
+    return (bheap){
+        .vtable = &bheap_vtable,
+        .arr = kiku_malloc(size*elt_size),
+        .less = less,
+        .size = 0,
+        .elt_size = elt_size,
+        .capacity = size
+    };
+}
+
+static inline void bheap_free(bheap *pq){
+    free(pq->arr);
+    pq->arr = NULL;
+    pq->size = 0;
+    pq->capacity = 0;
+}
+
 static void bheap_siftDown(bheap *pq, size_t index){
     /* O(log(height of tree - height of index)) */
     size_t index_lchild; /* left child or lesser child */
@@ -90,14 +112,8 @@ static void bheap_siftUp(bheap *pq, size_t index){
 static void bheap_push_internal(bheap *pq, const void *value){
     /* O(log size) */
     if(!(pq->size < pq->capacity)){
-        void *tmp = realloc(pq->arr, BHEAP_GROWTH_FACTOR*(pq->size*pq->elt_size));
-        if(tmp){
-            pq->arr = tmp;
-            pq->capacity *= BHEAP_GROWTH_FACTOR;
-        }
-        else{
-            exit(EXIT_FAILURE); //realloc failure
-        }
+        pq->arr = kiku_realloc(pq->arr, BHEAP_GROWTH_FACTOR*(pq->size*pq->elt_size));
+        pq->capacity *= BHEAP_GROWTH_FACTOR;
     }
     memcpy((char *)pq->arr + (pq->size)*pq->elt_size, value, pq->elt_size);
     pq->size++;
@@ -117,32 +133,6 @@ static void bheap_pop_internal(bheap *pq){
     else{
         exit(EXIT_FAILURE); //Can't pop from an empty heap
     }
-}
-
-static inline bheap bheap_init(
-        bool (*const less)(void *, void *),
-        size_t size,
-        size_t elt_size
-        ){
-    void *tmp = malloc(size*elt_size);
-    if(!tmp && size){ //malloc failure
-        exit(EXIT_FAILURE);
-    }
-    return (bheap){
-        .vtable = &bheap_vtable,
-        .arr = tmp,
-        .less = less,
-        .size = 0,
-        .elt_size = elt_size,
-        .capacity = size
-    };
-}
-
-static inline void bheap_free(bheap *pq){
-    free(pq->arr);
-    pq->arr = NULL;
-    pq->size = 0;
-    pq->capacity = 0;
 }
 
 #endif /* BHEAP_H */
