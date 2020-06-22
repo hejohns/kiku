@@ -2,12 +2,26 @@
 #ifndef BIDIRECTIONALCONTAINER_H
 #define BIDIRECTIONALCONTAINER_H
 
+#include "DirectionalContainer.h"
+
 struct BidirectionalContainer{
     struct DirectionalContainer;
     void *(*const prev)(void *, void *);
     void *(*const tail)(void *);
 };
 
+static inline void *BidirectionalContainer_begin(void *cont){
+    return (*(struct DirectionalContainer **)cont)->begin(cont);
+}
+static inline void *BidirectionalContainer_end(void *cont){
+    return (*(struct DirectionalContainer **)cont)->end(cont);
+}
+static inline void *BidirectionalContainer_next(void *cont, void *node){
+    return (*(struct DirectionalContainer **)cont)->next(cont, node);
+}
+static inline size_t BidirectionalContainer_size(void *cont){
+    return (*(struct DirectionalContainer **)cont)->size(cont);
+}
 static inline void *BidirectionalContainer_prev(void *cont, void *node){
     return (*(struct BidirectionalContainer **)cont)->prev(cont, node);
 }

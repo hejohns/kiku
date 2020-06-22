@@ -1,0 +1,34 @@
+// RandomAccessContainer.h
+#ifndef RANDOMACCESSCONTAINER_H
+#define RANDOMACCESSCONTAINER_H
+
+#include "BidirectionalContainer.h"
+
+struct RandomAccessContainer{
+    struct BidirectionalContainer;
+    void *(const at)(void *, size_t);
+};
+
+static inline void *RandomAccessContainer_begin(void *cont){
+    return (*(struct DirectionalContainer **)cont)->begin(cont);
+}
+static inline void *BidirectionalContainer_end(void *cont){
+    return (*(struct DirectionalContainer **)cont)->end(cont);
+}
+static inline void *RandomAccessContainer_next(void *cont, void *node){
+    return (*(struct DirectionalContainer **)cont)->next(cont, node);
+}
+static inline size_t BidirectionalContainer_size(void *cont){
+    return (*(struct DirectionalContainer **)cont)->size(cont);
+}
+static inline void *RandomAccessContainer_prev(void *cont, void *node){
+    return (*(struct BidirectionalContainer **)cont)->prev(cont, node);
+}
+static inline void *RandomAccessContainer_tail(void *cont){
+    return (*(struct BidirectionalContainer **)cont)->tail(cont);
+}
+static inline void *RandomAccessContainer_at(void *cont, size_t index){
+    return (*(struct RandomAccessContainer **)cont)->at(cont);
+}
+
+#endif /* RANDOMACCESSCONTAINER_H */
