@@ -6,58 +6,29 @@ Defined behavioral requirements for generic C programming
 
 Many ideas are taken from C++ and the naming convention
 certainly reflects that. 
-C++ is the best for speed, but the debugging experience
-is painful.
-The definitions list defines a standardized interface to
-structures, such that any any function that expects a
-generic type can cast a void *argument into the abstract
-type, and call the assigned function pointers with standard
-naming. 
+C++ is fast, but the debugging experience can be painful.
 
-For example, a random_access_container must contain a member
-void *(*const at)(void *, size_t)
-so a function such as
-
-void sort(void *rac){
-    ...
-    ((random_access_container *)rac)->at(rac, 0); //line 23
-    ...
-}
-
-will call the correct function pointer as long as the type
-passed into void sort(void *rac) follows the
-random_access_container definition.
-
-In this example, regarding line 23 specifically,
-the type passed into sort must have the function pointer
-void *(*const at)(void *, size_t)
-at the offset demanded by the random_access_container
-requirement. As such, the layout of a type is critical to
-correct behavior. The naming merely provides a convenience
-over the alternative, which is to manually add magic number
-offsets to find the correct function pointer
-(highly undesireable to say the least).
-
-Notice that this example is analagous to C++'s std::sort
-which requires iterators that meet the requirements of
-ValueSwappable and RandomAccessIterator
-(https://en.cppreference.com/w/cpp/algorithm/sort)
-
-The goal of kiku is to make a standard library interface
-that is easier to debug and seamless for users to extend
-with their own types.
-The defintions list is easy to parse to generate the
-correct C type declarations.
+The goal of kiku is to standardize type requirements
+to allow for generic programming while being easy to debug
+and seamless for users to extend with their own types.
 
 The goal is NOT raw performance. Go to C++ for that.
-This is promote code reuse without suffering from
-bloated naming. The function pointers certainly violate
-the zero-cost rule of C++.
+This is promote code reuse without suffering from excessive
+code bloat and difficult to read type identifiers.
 
-Notice of course that the casts to void * ditch all
+Notice of course that the casts to (void *) ditch all
 notions of static typing. While this consequence is
 not desirable, hopefully a malformed program will
-crash extremely quickly and make the error simple to 
-identify.
+crash extremely quickly.
 All function pointers are const to reduce accidental
-corruption of function pointers.
+corruption.
+
+Note that type requirements always begin with an uppercase
+letter such as:
+OneTwoThree
+while realized types always begin with a lowercase letter
+such as:
+oneTwoThree
+
+Standard type functions follow the format:
+TypeRequirement_functionName()
