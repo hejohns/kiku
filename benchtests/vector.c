@@ -5,7 +5,7 @@
 int main(){
     vector inst = vector_init(8, sizeof(int));
     int tmp;
-    size_t sz = 1<<24;
+    size_t sz = 1<<16;
     for(size_t i=0; i<sz; i++){
         tmp=i, RandomAccessContainer_pushBack(&inst, &tmp);
     }
