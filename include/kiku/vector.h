@@ -105,8 +105,8 @@ static void *vector_tail(void *cont){
 
 static void vector_pushFront_internal(vector *cont, void *value){
     if(!(cont->size < cont->capacity)){
-        cont->arr = kiku_realloc(cont->arr, VECTOR_GROWTH_FACTOR*cont->size);
-        cont->capacity = VECTOR_GROWTH_FACTOR*cont->capacity;
+        cont->arr = kiku_realloc(cont->arr, VECTOR_GROWTH_FACTOR*cont->size*cont->elt_size);
+        cont->capacity = VECTOR_GROWTH_FACTOR*cont->size;
     }
     memmove(((char *)cont->arr) + cont->elt_size, cont->arr, cont->size*cont->elt_size);
     memcpy(cont->arr, value, cont->elt_size);
