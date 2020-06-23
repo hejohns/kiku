@@ -5,7 +5,7 @@
 #include <kiku/DirectionalContainer.h>
 
 struct BidirectionalContainer{
-    struct DirectionalContainer;
+    struct DirectionalContainer DirectionalContainer;
     void *(*const prev)(void *, void *);
     void *(*const tail)(void *);
     void (*const pushFront)(void *, void *);
@@ -32,8 +32,8 @@ static inline void *BidirectionalContainer_prev(void *cont, void *node){
 static inline void *BidirectionalContainer_tail(void *cont){
     return (*(struct BidirectionalContainer **)cont)->tail(cont);
 }
-static inline void *BidirectionalContainer_pushFront(void *cont, void *value){
-    return (*(struct BidirectionalContainer **)cont)->pushFront(cont, value);
+static inline void BidirectionalContainer_pushFront(void *cont, void *value){
+    (*(struct BidirectionalContainer **)cont)->pushFront(cont, value);
 }
 
 #endif /* BIDIRECTIONALCONTAINER_H */

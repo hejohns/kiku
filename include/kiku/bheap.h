@@ -113,7 +113,7 @@ static void bheap_push_internal(bheap *pq, const void *value){
     /* O(log size) */
     if(!(pq->size < pq->capacity)){
         pq->arr = kiku_realloc(pq->arr, BHEAP_GROWTH_FACTOR*(pq->size*pq->elt_size));
-        pq->capacity *= BHEAP_GROWTH_FACTOR;
+        pq->capacity = BHEAP_GROWTH_FACTOR*(pq->size*pq->elt_size);
     }
     memcpy((char *)pq->arr + (pq->size)*pq->elt_size, value, pq->elt_size);
     pq->size++;
