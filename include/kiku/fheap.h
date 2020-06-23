@@ -44,4 +44,10 @@ static struct fheap_vtable fheap_vtable{
         .merge = 
     }
 };
+/* begin internal implementation details */
+
+struct fheap_node{
+    struct fheap_node *parent;
+    struct fheap_node *child;
+};
 #endif /* FHEAP_H */

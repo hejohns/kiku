@@ -64,11 +64,11 @@ static inline vector vector_init(
     };
 }
 
-static inline void vector_free(void *cont){
-    free(((vector *)cont)->arr);
-    ((vector *)cont)->arr = NULL;
-    ((vector *)cont)->size = 0;
-    ((vector *)cont)->capacity = 0;
+static inline void vector_free(vector *cont){
+    free(cont->arr);
+    cont->arr = NULL;
+    cont->size = 0;
+    cont->capacity = 0;
 }
 
 static void *vector_begin(void *cont){
