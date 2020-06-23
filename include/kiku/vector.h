@@ -42,6 +42,8 @@ static struct vector_vtable vector_vtable = {
 };
 /* begin internal implementation details */
 
+#define VECTOR_GROWTH_FACTOR
+
 static inline vector vector_init(
         size_t size,
         size_t elt_size){
@@ -54,11 +56,64 @@ static inline vector vector_init(
     };
 }
 
-static inline void vector_free(vector *cont){
-    free(cont->arr);
-    cont->arr = NULL;
-    cont->size = 0;
-    cont->capacity = 9;
+static inline void vector_free(void *cont){
+    free(((vector *)cont)->arr);
+    ((vector *)cont)->arr = NULL;
+    ((vector *)cont)->size = 0;
+    ((vector *)cont)->capacity = 9;
+}
+
+static void *vector_begin(void *cont){
+    return ((vector *)cont)->arr;
+}
+
+static void *vector_end(void *cont){
+    return (char *)((vector *)cont)->arr + ((vector *)cont)->size*((vector *)cont)->elt_size;
+}
+
+static void *vector_next(void *cont, void *node){
+    return (char *)node + ((vector *)cont)->elt_size;
+}
+
+static size_t vector_size(void *cont){
+    return ((vector *)cont)->size;
+}
+
+static void vector_pushBack_internal(vector *cont, void *value){
+    if(!(cont->size < cont->capacity)){
+        cont->arr = kiku_realloc(cont->arr, VECTOR_GROWTH_FACTOR*cont->size);
+        cont->capacity = VECTOR_GROWTH_FACTOR*capacity;
+    }
+    memcpy(((char *)(cont->arr)) + cont->size*cont->elt_size, value, cont->elt_size);
+    cont->size++;
+}
+static void vector_pushBack(void *cont, void *value){
+    vector_pushBack_internal(cont, value);
+}
+
+static void *vector_prev(void *cont, void *node){
+    return (char *)node - ((vector *)cont)->elt_size;
+}
+
+static void *vector_tail(void *cont){
+    return ((char *)(((vector *)cont)->arr)) + (((vector *)cont)->size-1)*((vector *)cont)->elt_size;
+}
+
+static void vector_pushFront_internal(vector *cont, void *value){
+    if(!(cont->size < cont->capacity)){
+        cont->arr = kiku_realloc(cont->arr, VECTOR_GROWTH_FACTOR*cont->size);
+        cont->capacity = VECTOR_GROWTH_FACTOR*capacity;
+    }
+    memmove(((char *)cont->arr) + cont->elt_size, cont->arr, cont->size*cont->elt_size);
+    memcpy(cont->arr, value, cont->elt_size);
+    cont->size++;
+}
+static void vector_pushFront(void *cont, void *value){
+    vector_pushFront_internal(cont, value);
+}
+
+static void *vector_at(void *cont, size_t index){
+    return ((char *)((vector *)cont)->arr) + ((vector *)cont)->size*((vector *)cont)->elt_size;
 }
 
 #endif /* VECTOR_H */
