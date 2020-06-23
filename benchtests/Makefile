@@ -11,5 +11,7 @@ bheap.exe: bheap.c
 	$(CC) $(CFLAGS) $< -o $@
 staticBheap.exe: staticBheap.c
 	$(CC) $(CFLAGS) $< -o $@
+vector.exe: vector.c
+	$(CC) $(CFLAGS) $< -o $@
 clean: 
 	rm *.o *.exe
