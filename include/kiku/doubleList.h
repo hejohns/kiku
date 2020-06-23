@@ -7,16 +7,6 @@
 #include <kiku/BidirectionalContainer.h>
 #include <kiku/deque.h>
 
-/* imaginary node definition
- * -- note datum comes first for alignment
- *
-struct doubleList_node{
-    char datum[elt_size];
-    struct doubleList_node *prev;
-    struct doubleList_node *next;
-};
-*/
-
 typedef struct doubleList{
     void *const vtable; //initialize to doubleList_vtable
     struct doubleList_node *head;
@@ -58,6 +48,16 @@ static struct doubleList_vtable doubleList_vtable{
 };
 /* begin internal implementation details */
 
+/* imaginary node definition
+ * -- note datum comes first for alignment
+ *
+struct doubleList_node{
+    char datum[elt_size];
+    void *prev;
+    void *next;
+};
+*/
+
 static inline doubleList doubleList_init(size_t elt_size){
     return (doubleList){
         .vtable = &doubleList_vtable,
@@ -69,7 +69,43 @@ static inline doubleList doubleList_init(size_t elt_size){
 
 }
 
+static inline void *doubleList_next_internal(doubleList *cont, void *node){
+    if(cont->elt_size % sizeof(void *)){
+        return (char *)node + cont->elt_size - (cont->elt_size % sizeof(void *)) + 2*sizeof(void *);
+    }
+    else{
+        return (char *)node + cont->elt_size + 2*sizeof(void *);
+    }
+}
+static inline void *doubleList_next(void *cont, void *node){
+    return doubleList_next_internal(cont, node);
+}
+
+static inline void *doubleList_prev_internal(doubleList *cont, void *node){
+    if(cont->elt_size % sizeof(void *)){
+        return (char *)node + cont->elt_size - (cont->elt_size % sizeof(void *)) + sizeof(void *);
+    }
+    else{
+        return (char *)node + cont->elt_size + sizeof(void *);
+    }
+}
+static inline void *doubleList_prev(void *cont, void *node){
+    return doubleList_prev_internal(cont, node);
+}
+
 static inline void doubleList_free(doubleList *cont){
+    void *tmp = cont->begin;
+    while(tmp){
+        void *tmp2 = doubleList_next(cont, tmp);
+        free(tmp);
+        tmp = tmp2;
+    }
+    cont->tail = NULL;
+    cont->size = 0;
+}
+
+static void *doubleList_begin(void *cont){
+    return ((doubleList *)cont)->head;
 }
 
 #endif /* DOUBLELIST_H */
