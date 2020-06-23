@@ -9,6 +9,7 @@ int main(){
     for(size_t i=0; i<sz; i++){
         tmp=i, RandomAccessContainer_pushBack(&inst, &tmp);
     }
+    assert(RandomAccessContainer_size(&inst) == sz);
     for(size_t i=0; i<sz; i++){
         assert(i == *(int *)RandomAccessContainer_at(&inst, i));
     }
@@ -19,14 +20,14 @@ int main(){
     for(size_t i=0; i<sz; i++){
         tmp=i, RandomAccessContainer_pushFront(&inst, &tmp);
     }
+    assert(RandomAccessContainer_size(&inst) == sz);
     for(size_t i=0; i<sz; i++){
-        assert(i == *(int *)RandomAccessContainer_at(&inst, i));
+        assert((sz-1-i) == *(int *)RandomAccessContainer_at(&inst, i));
     }
     for(size_t i=0; i<sz; i++){
         RandomAccessContainer_popBack(&inst);
     }
     assert(RandomAccessContainer_size(&inst) == 0);
-    assert(RandomAccessContainer_size(&inst) == sz);
     vector_free(&inst);
     return 0;
 }
