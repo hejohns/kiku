@@ -8,7 +8,8 @@ struct BidirectionalContainer{
     struct DirectionalContainer DirectionalContainer;
     void *(*const prev)(void *, void *);
     void *(*const tail)(void *);
-    void (*const pushFront)(void *, void *);
+    void (*const pushBack)(void *, void *);
+    void (*const popBack)(void *);
 };
 
 static inline void *BidirectionalContainer_begin(void *cont){
@@ -23,8 +24,11 @@ static inline void *BidirectionalContainer_next(void *cont, void *node){
 static inline size_t BidirectionalContainer_size(void *cont){
     return (*(struct DirectionalContainer **)cont)->size(cont);
 }
-static inline void BidirectionalContainer_pushBack(void *cont, void *value){
-    (*(struct DirectionalContainer **)cont)->pushBack(cont, value);
+static inline void BidirectionalContainer_pushFront(void *cont, void *value){
+    (*(struct DirectionalContainer **)cont)->pushFront(cont, value);
+}
+static inline void BidirectionalContainer_popFront(void *cont){
+    (*(struct DirectionalContainer **)cont)->popFront(cont);
 }
 static inline void *BidirectionalContainer_prev(void *cont, void *node){
     return (*(struct BidirectionalContainer **)cont)->prev(cont, node);
@@ -32,8 +36,11 @@ static inline void *BidirectionalContainer_prev(void *cont, void *node){
 static inline void *BidirectionalContainer_tail(void *cont){
     return (*(struct BidirectionalContainer **)cont)->tail(cont);
 }
-static inline void BidirectionalContainer_pushFront(void *cont, void *value){
-    (*(struct BidirectionalContainer **)cont)->pushFront(cont, value);
+static inline void BidirectionalContainer_pushBack(void *cont, void *value){
+    (*(struct BidirectionalContainer **)cont)->pushBack(cont, value);
+}
+static inline void BidirectionalContainer_popBack(void *cont){
+    (*(struct BidirectionalContainer **)cont)->popBack(cont);
 }
 
 #endif /* BIDIRECTIONALCONTAINER_H */

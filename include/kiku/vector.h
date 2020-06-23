@@ -18,10 +18,12 @@ static void *vector_begin(void *cont);
 static void *vector_end(void *cont);
 static void *vector_next(void *cont, void *node);
 static size_t vector_size(void *cont);
-static void vector_pushBack(void *cont, void *value);
+static void vector_pushFront(void *cont, void *value);
+static void vector_popFront(void *cont);
 static void *vector_prev(void *cont, void *node);
 static void *vector_tail(void *cont);
-static void vector_pushFront(void *cont, void *value);
+static void vector_pushBack(void *cont, void *value);
+static void vector_popBack(void *cont);
 static void *vector_at(void *cont, size_t index);
 
 struct vector_vtable{
@@ -35,11 +37,13 @@ static struct vector_vtable vector_vtable = {
                 .end = vector_end,
                 .next = vector_next,
                 .size = vector_size,
-                .pushBack = vector_pushBack
+                .pushFront = vector_pushFront,
+                .popFront = vector_popFront
             },
             .prev = vector_prev,
             .tail = vector_tail,
-            .pushFront = vector_pushFront
+            .pushBack = vector_pushBack,
+            .popBack = vector_popBack
         },
         .at = vector_at
     }
@@ -83,6 +87,35 @@ static size_t vector_size(void *cont){
     return ((vector *)cont)->size;
 }
 
+static void vector_pushFront_internal(vector *cont, void *value){
+    if(!(cont->size < cont->capacity)){
+        cont->arr = kiku_realloc(cont->arr, VECTOR_GROWTH_FACTOR*cont->size*cont->elt_size);
+        cont->capacity = VECTOR_GROWTH_FACTOR*cont->size;
+    }
+    memmove(((char *)cont->arr) + cont->elt_size, cont->arr, cont->size*cont->elt_size);
+    memcpy(cont->arr, value, cont->elt_size);
+    cont->size++;
+}
+static void vector_pushFront(void *cont, void *value){
+    vector_pushFront_internal(cont, value);
+}
+
+static void vector_popFront_internal(vector *cont){
+    memmove(cont->arr, ((char *)cont->arr) + cont->elt_size, (cont->size-1)*cont->elt_size);
+    cont->size--;
+}
+static void vector_popFront(void *cont){
+    vector_popFront_internal(cont);
+}
+
+static void *vector_prev(void *cont, void *node){
+    return (char *)node - ((vector *)cont)->elt_size;
+}
+
+static void *vector_tail(void *cont){
+    return ((char *)(((vector *)cont)->arr)) + (((vector *)cont)->size-1)*((vector *)cont)->elt_size;
+}
+
 static void vector_pushBack_internal(vector *cont, void *value){
     if(!(cont->size < cont->capacity)){
         cont->arr = kiku_realloc(cont->arr, VECTOR_GROWTH_FACTOR*cont->size*cont->elt_size);
@@ -95,25 +128,8 @@ static void vector_pushBack(void *cont, void *value){
     vector_pushBack_internal(cont, value);
 }
 
-static void *vector_prev(void *cont, void *node){
-    return (char *)node - ((vector *)cont)->elt_size;
-}
-
-static void *vector_tail(void *cont){
-    return ((char *)(((vector *)cont)->arr)) + (((vector *)cont)->size-1)*((vector *)cont)->elt_size;
-}
-
-static void vector_pushFront_internal(vector *cont, void *value){
-    if(!(cont->size < cont->capacity)){
-        cont->arr = kiku_realloc(cont->arr, VECTOR_GROWTH_FACTOR*cont->size*cont->elt_size);
-        cont->capacity = VECTOR_GROWTH_FACTOR*cont->size;
-    }
-    memmove(((char *)cont->arr) + cont->elt_size, cont->arr, cont->size*cont->elt_size);
-    memcpy(cont->arr, value, cont->elt_size);
-    cont->size++;
-}
-static void vector_pushFront(void *cont, void *value){
-    vector_pushFront_internal(cont, value);
+static void vector_popBack(void *cont){
+    ((vector *)cont)->size--;
 }
 
 static void *vector_at(void *cont, size_t index){

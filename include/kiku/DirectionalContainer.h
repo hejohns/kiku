@@ -7,7 +7,8 @@ struct DirectionalContainer{
     void *(*const end)(void *);
     void *(*const next)(void *, void *);
     size_t (*const size)(void *);
-    void (*const pushBack)(void *, void *);
+    void (*const pushFront)(void *, void *);
+    void (*const popFront)(void *);
 };
 
 static inline void *DirectionalContainer_begin(void *cont){
@@ -22,8 +23,11 @@ static inline void *DirectionalContainer_next(void *cont, void *node){
 static inline size_t DirectionalContainer_size(void *cont){
     return (*(struct DirectionalContainer **)cont)->size(cont);
 }
-static inline void DirectionalContainer_pushBack(void *cont, void *value){
-    (*(struct DirectionalContainer **)cont)->pushBack(cont, value);
+static inline void DirectionalContainer_pushFront(void *cont, void *value){
+    (*(struct DirectionalContainer **)cont)->pushFront(cont, value);
+}
+static inline void DirectionalContainer_popFront(void *cont){
+    (*(struct DirectionalContainer **)cont)->popFront(cont);
 }
 
 #endif /* DIRECTIONALCONTAINER_H */
