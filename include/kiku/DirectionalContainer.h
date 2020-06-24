@@ -2,6 +2,8 @@
 #ifndef DIRECTIONALCONTAINER_H
 #define DIRECTIONALCONTAINER_H
 
+#include <stddef.h>
+
 struct DirectionalContainer{
     void *(*const begin)(void *);
     void *(*const end)(void *);

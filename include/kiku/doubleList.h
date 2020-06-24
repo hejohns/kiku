@@ -30,11 +30,11 @@ static void doubleList_popBack(void *cont);
 struct doubleList_vtable{
     struct BidirectionalContainer BidirectionalContainer;
 };
-static struct doubleList_vtable doubleList_vtable{
+static struct doubleList_vtable doubleList_vtable = {
     .BidirectionalContainer = {
         .DirectionalContainer = {
             .begin = doubleList_begin,
-            .end = doublList_end,
+            .end = doubleList_end,
             .next = doubleList_next,
             .size = doubleList_size,
             .pushFront = doubleList_pushFront,
@@ -65,11 +65,11 @@ static inline doubleList doubleList_init(size_t elt_size){
         .tail = NULL,
         .size = 0,
         .elt_size = elt_size
-    }
+    };
 
 }
 
-static inline void *doubleList_next_internal(doubleList *cont, void *node){ //returns address of pointer to next node
+static inline void **doubleList_next_internal(doubleList *cont, void *node){ //returns address of pointer to next node
     if(cont->elt_size % sizeof(void *)){
         return (void **)((char *)node + cont->elt_size - (cont->elt_size % sizeof(void *)) + 2*sizeof(void *));
     }
@@ -83,7 +83,7 @@ static inline void *doubleList_next(void *cont, void *node){
 
 static inline void **doubleList_prev_internal(doubleList *cont, void *node){ //returns address of pointer to prev node
     if(cont->elt_size % sizeof(void *)){
-        return ((void **)(char *)node + cont->elt_size - (cont->elt_size % sizeof(void *)) + sizeof(void *));
+        return (void **)((char *)node + cont->elt_size - (cont->elt_size % sizeof(void *)) + sizeof(void *));
     }
     else{
         return (void **)((char *)node + cont->elt_size);
@@ -94,7 +94,7 @@ static inline void *doubleList_prev(void *cont, void *node){
 }
 
 static inline void doubleList_free(doubleList *cont){
-    void *tmp = cont->begin;
+    void *tmp = cont->head;
     while(tmp){
         void *tmp2 = doubleList_next(cont, tmp);
         free(tmp);
@@ -109,6 +109,7 @@ static void *doubleList_begin(void *cont){
 }
 
 static void *doubleList_end(void *cont){
+    (void)cont;
     return NULL;
 }
 
@@ -118,11 +119,10 @@ static size_t doubleList_size(void *cont){
 
 static void doubleList_pushFront_internal(doubleList *cont, void *value){
     void *new_head = (cont->elt_size % sizeof(void *))? 
-        kiku_malloc(cont->elt_size - (cont->elt_size % sizeof(void *)) + 3*sizeof(void *));
+        kiku_malloc(cont->elt_size - (cont->elt_size % sizeof(void *)) + 3*sizeof(void *))
         :
         kiku_malloc(cont->elt_size + 2*sizeof(void *));
     memcpy(new_head, value, cont->elt_size);
-    cont->begin = new_head;
     if(cont->size){
         *doubleList_prev_internal(cont, new_head) = doubleList_prev(cont, cont->head);
         *doubleList_next_internal(cont, new_head) = cont->head;
@@ -132,6 +132,7 @@ static void doubleList_pushFront_internal(doubleList *cont, void *value){
         *doubleList_next_internal(cont, new_head) = NULL;
         cont->tail = new_head;
     }
+    cont->head = new_head;
     cont->size++;
 }
 static void doubleList_pushFront(void *cont, void *value){
@@ -159,11 +160,10 @@ static void *doubleList_tail(void *cont){
 
 static void doubleList_pushBack_internal(doubleList *cont, void *value){
     void *new_head = (cont->elt_size % sizeof(void *))? 
-        kiku_malloc(cont->elt_size - (cont->elt_size % sizeof(void *)) + 3*sizeof(void *));
+        kiku_malloc(cont->elt_size - (cont->elt_size % sizeof(void *)) + 3*sizeof(void *))
         :
         kiku_malloc(cont->elt_size + 2*sizeof(void *));
     memcpy(new_head, value, cont->elt_size);
-    cont->tail = new_head;
     if(cont->size){
         *doubleList_prev_internal(cont, new_head) = cont->tail;
         *doubleList_next_internal(cont, new_head) = doubleList_next(cont, cont->tail);
@@ -171,8 +171,9 @@ static void doubleList_pushBack_internal(doubleList *cont, void *value){
     else{
         *doubleList_prev_internal(cont, new_head) = NULL;
         *doubleList_next_internal(cont, new_head) = NULL;
-        cont->begin = new_head;
+        cont->head = new_head;
     }
+    cont->tail = new_head;
     cont->size++;
 }
 static void doubleList_pushBack(void *cont, void *value){
