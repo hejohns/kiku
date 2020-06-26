@@ -136,4 +136,6 @@ static void *vector_at(void *cont, size_t index){
     return ((char *)((vector *)cont)->arr) + index*((vector *)cont)->elt_size;
 }
 
+#undef VECTOR_GROWTH_FACTOR
+
 #endif /* VECTOR_H */

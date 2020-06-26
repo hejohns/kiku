@@ -135,4 +135,6 @@ static void bheap_pop_internal(bheap *pq){
     }
 }
 
+#undef BHEAP_GROWTH_FACTOR
+
 #endif /* BHEAP_H */
