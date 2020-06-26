@@ -27,6 +27,18 @@ static inline void RandomAccessContainer_pushFront(void *cont, void *value){
 static inline void RandomAccessContainer_popFront(void *cont){
     (*(struct DirectionalContainer **)cont)->popFront(cont);
 }
+static inline void RandomAccessContainer_insertAfter(void *cont, void *node, void *value){
+    (*(struct DirectionalContainer **)cont)->insertAfter(cont, node, value);
+}
+static inline void RandomAccessContainer_eraseAfter(void *cont, void *node){
+    (*(struct DirectionalContainer **)cont)->eraseAfter(cont, node);
+}
+static inline void RandomAccessContainer_merge(void *cont, void *cont_other){
+    (*(struct DirectionalContainer **)cont)->merge(cont, cont_other);
+}
+static inline void RandomAccessContainer_clear(void *cont){
+    (*(struct DirectionalContainer **)cont)->clear(cont);
+}
 static inline void *RandomAccessContainer_prev(void *cont, void *node){
     return (*(struct BidirectionalContainer **)cont)->prev(cont, node);
 }
@@ -38,6 +50,12 @@ static inline void RandomAccessContainer_pushBack(void *cont, void *value){
 }
 static inline void RandomAccessContainer_popBack(void *cont){
     (*(struct BidirectionalContainer **)cont)->popBack(cont);
+}
+static inline void RandomAccessContainer_insertBefore(void *cont, void *node){
+    (*(struct BidirectionalContainer **)cont)->insertBefore(cont, node);
+}
+static inline void RandomAccessContainer_eraseBefore(void *cont){
+    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont);
 }
 static inline void *RandomAccessContainer_at(void *cont, size_t index){
     return (*(struct RandomAccessContainer **)cont)->at(cont, index);
