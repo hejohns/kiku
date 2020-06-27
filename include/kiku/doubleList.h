@@ -22,10 +22,16 @@ static void *doubleList_next(void *cont, void *node);
 static size_t doubleList_size(void *cont);
 static void doubleList_pushFront(void *cont, void *value);
 static void doubleList_popFront(void *cont);
+static void doubleList_insertAfter(void *cont, void *node, void *value);
+static void doubleList_eraseAfter(void *cont, void *node);
+static void doubleList_merge(void *cont, void *cont_other);
+static void doubleList_clear(void *cont);
 static void *doubleList_prev(void *cont, void *node);
 static void *doubleList_tail(void *cont);
 static void doubleList_pushBack(void *cont, void *value);
 static void doubleList_popBack(void *cont);
+static void doubleList_insertBefore(void *cont, void *node, void *value);
+static void doubleList_eraseBefore(void *cont, void *node);
 
 struct doubleList_vtable{
     struct BidirectionalContainer BidirectionalContainer;
@@ -38,18 +44,25 @@ static struct doubleList_vtable doubleList_vtable = {
             .next = doubleList_next,
             .size = doubleList_size,
             .pushFront = doubleList_pushFront,
-            .popFront = doubleList_popFront
+            .popFront = doubleList_popFront,
+            .insertAfter = doubleList_insertAfter,
+            .eraseAfter = doubleList_eraseAfter,
+            .merge = doubleList_merge,
+            .clear = doubleList_clear
         },
         .prev = doubleList_prev,
         .tail = doubleList_tail,
         .pushBack = doubleList_pushBack,
-        .popBack = doubleList_popBack
+        .popBack = doubleList_popBack,
+        .insertBefore = doubleList_insertBefore,
+        .eraseBefore = doubleList_eraseBefore
     }
 };
 /* begin internal implementation details */
 
 /* imaginary node definition
  * -- note datum comes first for alignment
+ * and so node address == datum address
  *
 struct doubleList_node{
     char datum[elt_size];
@@ -77,7 +90,7 @@ static inline void **doubleList_next_internal(doubleList *cont, void *node){ //r
         return (void **)((char *)node + cont->elt_size + sizeof(void *));
     }
 }
-static inline void *doubleList_next(void *cont, void *node){
+static void *doubleList_next(void *cont, void *node){
     return *doubleList_next_internal(cont, node);
 }
 
@@ -89,7 +102,7 @@ static inline void **doubleList_prev_internal(doubleList *cont, void *node){ //r
         return (void **)((char *)node + cont->elt_size);
     }
 }
-static inline void *doubleList_prev(void *cont, void *node){
+static void *doubleList_prev(void *cont, void *node){
     return *doubleList_prev_internal(cont, node);
 }
 

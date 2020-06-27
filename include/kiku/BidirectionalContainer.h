@@ -56,8 +56,8 @@ static inline void BidirectionalContainer_pushBack(void *cont, void *value){
 static inline void BidirectionalContainer_popBack(void *cont){
     (*(struct BidirectionalContainer **)cont)->popBack(cont);
 }
-static inline void BidirectionalContainer_insertBefore(void *cont, void *node){
-    (*(struct BidirectionalContainer **)cont)->insertBefore(cont, node);
+static inline void BidirectionalContainer_insertBefore(void *cont, void *node, void *value){
+    (*(struct BidirectionalContainer **)cont)->insertBefore(cont, node, value);
 }
 static inline void BidirectionalContainer_eraseBefore(void *cont){
     (*(struct BidirectionalContainer **)cont)->eraseBefore(cont);
