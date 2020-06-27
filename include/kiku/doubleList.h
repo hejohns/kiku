@@ -63,11 +63,13 @@ static struct doubleList_vtable doubleList_vtable = {
 /* imaginary node definition
  * -- note datum comes first for alignment
  * and so node address == datum address
+ * -- next is first to maintain compatibility
+ * with singleList
  *
 struct doubleList_node{
     char datum[elt_size];
-    void *prev;
     void *next;
+    void *prev;
 };
 */
 
@@ -130,7 +132,14 @@ static size_t doubleList_size(void *cont){
     return ((doubleList *)cont)->size;
 }
 
+static inline void doubleList_insertBefore_internal(doubleList *cont, void *node, void *value){
+}
+static void doubleList_insertBefore(void *cont, void *node, void *value){
+    doubleList_insertBefore_internal(cont, node, value);
+}
+
 static void doubleList_pushFront_internal(doubleList *cont, void *value){
+    /*
     void *new_head = (cont->elt_size % sizeof(void *))? 
         kiku_malloc(cont->elt_size - (cont->elt_size % sizeof(void *)) + 3*sizeof(void *))
         :
@@ -147,6 +156,8 @@ static void doubleList_pushFront_internal(doubleList *cont, void *value){
     }
     cont->head = new_head;
     cont->size++;
+    */
+    doubleList_insertBefore(cont, cont->head, value);
 }
 static void doubleList_pushFront(void *cont, void *value){
     doubleList_pushFront_internal(cont, value);
