@@ -1,5 +1,5 @@
 1) clean up doubleList.h
-2) write singleList and transfer applicable portions of doubleList to singleList
 3) test doubleList
-4) fix up vector and singleList
+4) fix up vector
 5) finally get to do fheap
+6) make benchtests type requirement specific, not realized type specific

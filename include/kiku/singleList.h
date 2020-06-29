@@ -2,11 +2,10 @@
 #ifndef SINGLELIST_H
 #define SINGLELIST_H
 
-#include <stdlib.h>
 #include <assert.h>
 
-#include <kiku/DirectionalContainer.h>
 #include <kiku/common.h>
+#include <kiku/DirectionalContainer.h>
 
 typedef struct singleList{
     void *const vtable; //initialize to singleList_vtable

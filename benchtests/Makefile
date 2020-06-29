@@ -9,8 +9,8 @@ default:
 	make clean
 bheap.exe: bheap.c
 	$(CC) $(CFLAGS) $< -o $@
-singleList.exe: singleList.c
-	$(CC) $(CFLAGS) $< -o $@
+singleList.exe: DirectionalContainer.c
+	$(CC) $(CFLAGS) -DTYPE=singleList -include kiku/singleList.h $< -o $@
 staticBheap.exe: staticBheap.c
 	$(CC) $(CFLAGS) $< -o $@
 vector.exe: vector.c

@@ -1,9 +1,17 @@
-// singleList.c
+// DirectionalContainer.c
 
 #include <assert.h>
 #include <math.h>
 
-#include <kiku/singleList.h>
+#include <kiku/DirectionalContainer.h>
+
+#ifndef TYPE
+#error
+#endif
+
+#define CALL_HELPER2(a, b) a ## _ ## b
+#define CALL_HELPER(a, b) CALL_HELPER2(a, b)
+#define CALL(x) CALL_HELPER(TYPE, x)
 
 struct oblique{
     size_t a;
@@ -11,9 +19,9 @@ struct oblique{
 };
 
 int main(){
-    singleList int_list = singleList_init(sizeof(int));
-    singleList double_list = singleList_init(sizeof(double));
-    singleList oblique_list = singleList_init(sizeof(struct oblique));
+    TYPE int_list = CALL(init)(sizeof(int));
+    TYPE double_list = CALL(init)(sizeof(double));
+    TYPE oblique_list = CALL(init)(sizeof(struct oblique));
     /* basic checks */
     assert(DirectionalContainer_begin(&int_list) == DirectionalContainer_end(&int_list));
     assert(DirectionalContainer_begin(&double_list) == DirectionalContainer_end(&double_list));
@@ -21,7 +29,7 @@ int main(){
     assert(DirectionalContainer_size(&int_list) == 0);
     assert(DirectionalContainer_size(&double_list) == 0);
     assert(DirectionalContainer_size(&oblique_list) == 0);
-    /* singleList_pushFront */
+    /* TYPE_pushFront */
     int int_tmp;
     double double_tmp;
     struct oblique oblique_tmp;
@@ -34,7 +42,7 @@ int main(){
     oblique_tmp=(struct oblique){20, 2}, DirectionalContainer_pushFront(&oblique_list, &oblique_tmp);
     oblique_tmp=(struct oblique){10, 1}, DirectionalContainer_pushFront(&oblique_list, &oblique_tmp);
     assert(DirectionalContainer_size(&oblique_list) == 3);
-    /* singleList_next */
+    /* TYPE_next */
     int against = 10;
     for(void *tmp = DirectionalContainer_begin(&int_list);
             tmp != DirectionalContainer_end(&int_list);
@@ -56,7 +64,7 @@ int main(){
         assert(((struct oblique *)tmp)->a == (size_t)against);
         against += 10;
     }
-    /* singleList_insertAfter */
+    /* TYPE_insertAfter */
     oblique_tmp=(struct oblique){11, 1}, DirectionalContainer_insertAfter(&oblique_list, DirectionalContainer_begin(&oblique_list), &oblique_tmp);
     oblique_tmp=(struct oblique){12, 1}, DirectionalContainer_insertAfter(&oblique_list, DirectionalContainer_next(&oblique_list, DirectionalContainer_begin(&oblique_list)), &oblique_tmp);
     do{
@@ -84,7 +92,7 @@ int main(){
             sw++;
         }
     } while(0);
-    /* singleList_eraseAfter */
+    /* TYPE_eraseAfter */
     DirectionalContainer_eraseAfter(&oblique_list, DirectionalContainer_begin(&oblique_list));
     DirectionalContainer_eraseAfter(&oblique_list, DirectionalContainer_begin(&oblique_list));
     do{
@@ -106,8 +114,8 @@ int main(){
             sw++;
         }
     } while(0);
-    /* singleList_merge */
-    singleList oblique_list2 = singleList_init(sizeof(struct oblique));
+    /* TYPE_merge */
+    TYPE oblique_list2 = CALL(init)(sizeof(struct oblique));
     for(void *tmp = DirectionalContainer_begin(&oblique_list);
             tmp != DirectionalContainer_end(&oblique_list);
             tmp = DirectionalContainer_next(&oblique_list, tmp)){
@@ -142,7 +150,7 @@ int main(){
             sw++;
         }
     } while(0);
-    singleList_free(&oblique_list2);
+    CALL(free)(&oblique_list2);
     /* bench part of benchtest */
     DirectionalContainer_clear(&oblique_list);
     for(size_t i=1; i <= 1<<20; i++){
@@ -156,8 +164,8 @@ int main(){
     }
     assert(DirectionalContainer_size(&oblique_list) == 0);
     /* free memory */
-    singleList_free(&int_list);
-    singleList_free(&double_list);
-    singleList_free(&oblique_list);
+    CALL(free)(&int_list);
+    CALL(free)(&double_list);
+    CALL(free)(&oblique_list);
     return 0;
 }
