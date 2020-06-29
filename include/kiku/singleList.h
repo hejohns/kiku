@@ -88,13 +88,16 @@ static void *singleList_next(void *cont, void *node){
 }
 
 static inline void singleList_clear_internal(singleList *cont){
-    for(void *tmp = cont->head, *after_tmp; tmp && tmp != cont->head; tmp = after_tmp){
-        /* tmp != cont->head check is irrelevant to singleList since singleList is
+    for(void *tmp = cont->head, *after_tmp; tmp; tmp = after_tmp){
+        after_tmp = singleList_next(cont, tmp);
+        free(tmp);
+        if(after_tmp == cont->head){
+        /* This check is irrelevant to singleList since singleList is
          * unsuitable for a circular list (ex pushFront will leak nodes).
          * However, doubleList greatly appreciates this check, so this check must remain.
          */
-        *after_tmp = singleList_next(cont, tmp);
-        free(tmp);
+            break;
+        }
     }
     cont->head = NULL;
     cont->size = 0;
@@ -133,7 +136,7 @@ static inline void singleList_insertAfter_internal(singleList *cont, void *node,
         void *new_node = kiku_malloc(singleList_node_size_internal(cont));
         memcpy(new_node, value, cont->elt_size);
         *singleList_next_internal(cont, new_node) = NULL;
-        cont->begin = new_node;
+        cont->head = new_node;
     }
     cont->size++;
 }
@@ -167,9 +170,9 @@ static void singleList_pushFront(void *cont, void *value){
 
 static void singleList_popFront_internal(singleList *cont){
     assert(cont->size > 0);
-    void *node_after = singleList_next(cont, cont->begin);
-    free(cont->begin);
-    cont->begin = node_after;
+    void *node_after = singleList_next(cont, cont->head);
+    free(cont->head);
+    cont->head = node_after;
     cont->size--;
 }
 static void singleList_popFront(void *cont){
@@ -178,7 +181,7 @@ static void singleList_popFront(void *cont){
 
 static inline void singleList_merge_internal(singleList *cont, singleList *cont_other){
     void *cont_tail;
-    for(cont_tail = cont->begin;
+    for(cont_tail = cont->head;
             singleList_next(cont, cont_tail);
             cont_tail = singleList_next(cont, cont_tail)){
     }
