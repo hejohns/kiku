@@ -1,4 +1,5 @@
 1) clean up doubleList.h
+2) by clean up I mean actually make it work for circular lists
 3) test doubleList
 4) fix up vector
 5) finally get to do fheap
