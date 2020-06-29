@@ -109,6 +109,43 @@ static inline void doubleList_free(doubleList *cont){
     doubleList_clear(cont);
 }
 
+static inline void doubleList_pushFront_internal(doubleList *cont, void *value){
+    void *new_node = kiku_malloc(doubleList_node_size_internal(cont));
+    memcpy(new_node, value, cont->elt_size);
+    *singleList_next_internal(cont, new_node) = cont->head;
+    if(cont->size){ //preserve structure if list is circular
+        *doubleList_prev_internal(cont, new_node) = doubleList_prev(cont, cont->head);
+        *singleList_next_internal(cont, cont->tail) = new_node;
+    }
+    else{
+        *doubleList_prev_internal(cont, new_node) = NULL;
+        cont->tail = new_node;
+    }
+    cont->head= new_node;
+    cont->size++;
+}
+static void doubleList_pushFront(void *cont, void *value){
+    doubleList_pushFront_internal(cont, valiue);
+}
+
+static inline void doubleList_pushBack_internal(doubleList *cont, void *value){
+    void *new_node = kiku_malloc(doubleList_node_size_internal(cont));
+    memcpy(new_node, value, cont->elt_size);
+    *doubleList_prev_internal(cont, new_node) = cont->tail;
+    if(cont->size){ //preserve structure if list is circular
+        *singleList_next_internal(cont, new_node) = singleList_next(cont, cont->tail);
+    }
+    else{
+        *singleList_next_internal(cont, new_node) = NULL;
+        cont->head = new_node;
+    }
+    cont->tail = new_node;
+    cont->size++;
+}
+static void doubleList_pushBack(void *cont, void *value){
+    doubleList_insertBefore(cont, doubleList_end(cont), value);
+}
+
 static inline void doubleList_insertAfter_internal(doubleList *cont, void *node, void *value){
     if(node){
         void *new_node = kiku_malloc(doubleList_node_size_internal(cont));
@@ -127,13 +164,8 @@ static inline void doubleList_insertAfter_internal(doubleList *cont, void *node,
     }
     else{ //to allow insertAfter on begin on an empty list
         assert(cont->size == 0);
-        void *new_node = kiku_malloc(doubleList_node_size_internal(cont));
-        memcpy(new_node, value, cont->elt_size);
-        *doubleList_prev_internal(cont, new_node) = NULL;
-        *singleList_next_internal(cont, new_node) = NULL;
-        cont->begin = new_node;
-        cont->tail = new_node;
-        cont->size++;
+        doubleList_pushFront(cont, value);
+        //
     }
 }
 static void doubleList_insertAfter(void *cont, void *node, void *value){
@@ -215,20 +247,12 @@ static void doubleList_eraseBefore(void *cont, void *node){
     doubleList_eraseBefore_internal(cont, node);
 }
 
-static void doubleList_pushFront(void *cont, void *value){
-    doubleList_insertBefore(cont, ((doubleList *)cont)->head, value);
-}
-
-static void doubleList_popFront(void *cont){
-    doubleList_eraseBefore(cont, singleList_next(cont, ((doubleList *)cont)->head));
-}
-
 static void *doubleList_tail(void *cont){
     return ((doubleList *)cont)->tail;
 }
 
-static void doubleList_pushBack(void *cont, void *value){
-    doubleList_insertBefore(cont, doubleList_end(cont), value);
+static void doubleList_popFront(void *cont){
+    doubleList_eraseBefore(cont, singleList_next(cont, ((doubleList *)cont)->head));
 }
 
 static void doubleList_popBack(void *cont){
