@@ -90,13 +90,6 @@ static inline void singleList_clear_internal(singleList *cont){
     for(void *tmp = cont->head, *after_tmp; tmp; tmp = after_tmp){
         after_tmp = singleList_next(cont, tmp);
         free(tmp);
-        if(after_tmp == cont->head){
-        /* This check is irrelevant to singleList since singleList is
-         * unsuitable for a circular list (ex pushFront will leak nodes).
-         * However, doubleList greatly appreciates this check, so this check must remain.
-         */
-            break;
-        }
     }
     cont->head = NULL;
     cont->size = 0;

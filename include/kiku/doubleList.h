@@ -113,7 +113,7 @@ static inline void doubleList_pushFront_internal(doubleList *cont, void *value){
     void *new_node = kiku_malloc(doubleList_node_size_internal(cont));
     memcpy(new_node, value, cont->elt_size);
     *singleList_next_internal(cont, new_node) = cont->head;
-    if(cont->size){ //preserve structure if list is circular
+    if(cont->size){
         *doubleList_prev_internal(cont, new_node) = doubleList_prev(cont, cont->head);
         *singleList_next_internal(cont, cont->tail) = new_node;
     }
