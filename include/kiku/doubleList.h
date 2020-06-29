@@ -6,6 +6,7 @@
 #include <assert.h>
 
 #include <kiku/BidirectionalContainer.h>
+#include <kiku/singleList.h>
 #include <kiku/common.h>
 
 typedef struct doubleList{
@@ -17,16 +18,16 @@ typedef struct doubleList{
 } doubleList;
 
 /* forward declare internal functions called by type required interface */
-static void *doubleList_begin(void *cont);
-static void *doubleList_end(void *cont);
-static void *doubleList_next(void *cont, void *node);
-static size_t doubleList_size(void *cont);
+//static void *doubleList_begin(void *cont);
+//static void *doubleList_end(void *cont);
+//static void *doubleList_next(void *cont, void *node);
+//static size_t doubleList_size(void *cont);
 static void doubleList_pushFront(void *cont, void *value);
 static void doubleList_popFront(void *cont);
 static void doubleList_insertAfter(void *cont, void *node, void *value);
 static void doubleList_eraseAfter(void *cont, void *node);
 static void doubleList_merge(void *cont, void *cont_other);
-static void doubleList_clear(void *cont);
+//static void doubleList_clear(void *cont);
 static void *doubleList_prev(void *cont, void *node);
 static void *doubleList_tail(void *cont);
 static void doubleList_pushBack(void *cont, void *value);
@@ -40,16 +41,16 @@ struct doubleList_vtable{
 static struct doubleList_vtable doubleList_vtable = {
     .BidirectionalContainer = {
         .DirectionalContainer = {
-            .begin = doubleList_begin,
-            .end = doubleList_end,
-            .next = doubleList_next,
-            .size = doubleList_size,
+            .begin = singleList_begin,
+            .end = singleList_end,
+            .next = singleList_next,
+            .size = singleList_size,
             .pushFront = doubleList_pushFront,
             .popFront = doubleList_popFront,
             .insertAfter = doubleList_insertAfter,
             .eraseAfter = doubleList_eraseAfter,
             .merge = doubleList_merge,
-            .clear = doubleList_clear
+            .clear = singleList_clear
         },
         .prev = doubleList_prev,
         .tail = doubleList_tail,
