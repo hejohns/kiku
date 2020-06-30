@@ -53,8 +53,14 @@ static inline void CircularContainer_popBack(void *cont){
 static inline void CircularContainer_insertBefore(void *cont, void *node, void *value){
     (*(struct BidirectionalContainer **)cont)->insertBefore(cont, node, value);
 }
-static inline void CircularContainer_eraseBefore(void *cont){
-    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont);
+static inline void CircularContainer_eraseBefore(void *cont, void *node){
+    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont, node);
+}
+/* additional functions for convenience */
+
+static inline void CircularContainer_erase(void *cont, void *node){
+    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont,
+            (*(struct DirectionalContainer **)cont)->next(cont, node));
 }
 
 #endif /* CIRCULARCONTAINER_H */
