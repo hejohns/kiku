@@ -28,22 +28,34 @@ corruption.
 
 Type requirements always begin with an uppercase letter
 such as
-OneTwoThree
+    OneTwoThree
 while realized types always begin with a lowercase letter
 such as
-oneTwoThree
+    oneTwoThree
 
 Standard type functions follow the format
-TypeRequirement_functionName()
+    TypeRequirement_functionName(void *, ...)
+where the first argument is always the address
+of the type instance
 
-Type requirements are are not realized types.
+Type requirements are NOT realized types.
 To avoid using the same namespace,
 DO NOT TYPEDEF TYPE REQUIREMENTS.
 
 Realized types must provide a _init() inline function
 that returns the same type, and a _free() inline function
-that properly deallocated resources captured in _init().
+that properly deallocates resources captured in _init().
 i.e. all type instances must be able to be declared as
-type type_inst = type_init(...);
+    type type_inst = type_init(...);
 and deallocated as
-type_free(&type_inst);
+    type_free(&type_inst);
+
+Benchtests are specific to each type requirement.
+A caveat is that different realized types often have
+different _init() signatures. Thus, benchtests have s ifdef
+block at the beginning to properly initialize each
+type instance. New realized types wishing to run the test
+must append their own ifdef section and create a new
+MAKEFILE target.
+This is the interim solution until something better is
+found.
