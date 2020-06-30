@@ -45,7 +45,7 @@ static struct clist_vtable clist_vtable = {
 
 static inline clist clist_init(size_t elt_size){
     return (clist){
-        .vtable = &dlist_vtable,
+        .vtable = &clist_vtable,
         .head = NULL,
         .size = 0,
         .elt_size = elt_size,
@@ -83,4 +83,3 @@ static inline void clist_free(clist *cont){
 }
 
 #endif /* CLIST_H */
-
