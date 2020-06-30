@@ -19,12 +19,12 @@ struct oblique{
 };
 
 int main(){
-#if defined(_dlist)
+#if defined(DLIST_H)
     TYPE int_list = CALL(init)(sizeof(int));
     TYPE double_list = CALL(init)(sizeof(double));
     TYPE oblique_list = CALL(init)(sizeof(struct oblique));
 #endif
-#ifdef _vector 
+#ifdef VECTOR_H
 #endif
     /* basic checks */
     assert(BidirectionalContainer_begin(&int_list) == BidirectionalContainer_end(&int_list));

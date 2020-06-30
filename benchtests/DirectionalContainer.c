@@ -19,12 +19,12 @@ struct oblique{
 };
 
 int main(){
-#if defined(_dlist) || defined(_slist)
+#if defined(DLIST_H) || defined(SLIST_H)
     TYPE int_list = CALL(init)(sizeof(int));
     TYPE double_list = CALL(init)(sizeof(double));
     TYPE oblique_list = CALL(init)(sizeof(struct oblique));
 #endif
-#ifdef _vector 
+#ifdef VECTOR_H
 #endif
     /* basic checks */
     assert(DirectionalContainer_begin(&int_list) == DirectionalContainer_end(&int_list));
