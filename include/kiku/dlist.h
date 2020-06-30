@@ -1,6 +1,6 @@
 // dlist.h
-#ifndef DOUBLELIST_H
-#define DOUBLELIST_H
+#ifndef DLIST_H
+#define DLIST_H
 
 #include <assert.h>
 
@@ -284,4 +284,4 @@ static void dlist_merge(void *cont, void *cont_other){
     dlist_merge_internal(cont, cont_other);
 }
 
-#endif /* DOUBLELIST_H */
+#endif /* DLIST_H */

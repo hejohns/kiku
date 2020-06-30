@@ -1,6 +1,6 @@
 // slist.h
-#ifndef SINGLELIST_H
-#define SINGLELIST_H
+#ifndef SLIST_H
+#define SLIST_H
 
 #include <assert.h>
 
@@ -186,5 +186,5 @@ static void slist_merge(void *cont, void *cont_other){
     slist_merge_internal(cont, cont_other);
 }
 
-#endif /* SINGLELIST_H */
+#endif /* SLIST_H */
 
