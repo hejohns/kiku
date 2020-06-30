@@ -54,11 +54,17 @@ static inline void RandomAccessContainer_popBack(void *cont){
 static inline void RandomAccessContainer_insertBefore(void *cont, void *node void *value){
     (*(struct BidirectionalContainer **)cont)->insertBefore(cont, node, value);
 }
-static inline void RandomAccessContainer_eraseBefore(void *cont){
-    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont);
+static inline void RandomAccessContainer_eraseBefore(void *cont, void *node){
+    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont, node);
 }
 static inline void *RandomAccessContainer_at(void *cont, size_t index){
     return (*(struct RandomAccessContainer **)cont)->at(cont, index);
+}
+/* additional functions for convenience */
+
+static inline void RandomAccessContainer_erase(void *cont, void *node){
+    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont,
+            (*(struct DirectionalContainer **)cont)->next(cont, node));
 }
 
 #endif /* RANDOMACCESSCONTAINER_H */
