@@ -39,12 +39,21 @@ int main(){
     struct oblique oblique_tmp;
     int_tmp=10, DirectionalContainer_pushFront(&int_list, &int_tmp);
     assert(DirectionalContainer_size(&int_list) == 1);
+    assert(*(int *)DirectionalContainer_begin(&int_list) == 10);
     double_tmp=20, DirectionalContainer_pushFront(&double_list, &double_tmp);
+    assert(fabs(*(double *)DirectionalContainer_begin(&double_list) - 20) < .01);
     double_tmp=10, DirectionalContainer_pushFront(&double_list, &double_tmp);
+    assert(fabs(*(double *)DirectionalContainer_begin(&double_list) - 10) < .01);
     assert(DirectionalContainer_size(&double_list) == 2);
     oblique_tmp=(struct oblique){30, 3}, DirectionalContainer_pushFront(&oblique_list, &oblique_tmp);
+    assert(((struct oblique *)DirectionalContainer_begin(&oblique_list))->a == 30);
+    assert(((struct oblique *)DirectionalContainer_begin(&oblique_list))->b == 3);
     oblique_tmp=(struct oblique){20, 2}, DirectionalContainer_pushFront(&oblique_list, &oblique_tmp);
+    assert(((struct oblique *)DirectionalContainer_begin(&oblique_list))->a == 20);
+    assert(((struct oblique *)DirectionalContainer_begin(&oblique_list))->b == 2);
     oblique_tmp=(struct oblique){10, 1}, DirectionalContainer_pushFront(&oblique_list, &oblique_tmp);
+    assert(((struct oblique *)DirectionalContainer_begin(&oblique_list))->a == 10);
+    assert(((struct oblique *)DirectionalContainer_begin(&oblique_list))->b == 1);
     assert(DirectionalContainer_size(&oblique_list) == 3);
     /* TYPE_next */
     int against = 10;

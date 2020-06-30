@@ -59,8 +59,8 @@ static inline void BidirectionalContainer_popBack(void *cont){
 static inline void BidirectionalContainer_insertBefore(void *cont, void *node, void *value){
     (*(struct BidirectionalContainer **)cont)->insertBefore(cont, node, value);
 }
-static inline void BidirectionalContainer_eraseBefore(void *cont){
-    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont);
+static inline void BidirectionalContainer_eraseBefore(void *cont, void *node){
+    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont, node);
 }
 
 #endif /* BIDIRECTIONALCONTAINER_H */
