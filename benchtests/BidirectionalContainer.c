@@ -80,7 +80,18 @@ int main(){
     /* TYPE_insertBefore */
     against = (struct oblique){1, 1};
     BidirectionalContainer_insertBefore(&oblique_list, BidirectionalContainer_begin(&oblique_list), &against);
+    against = (struct oblique){3, 3};
+    BidirectionalContainer_insertBefore(&oblique_list, BidirectionalContainer_end(&oblique_list), &against);
+    against = (struct oblique){2, 2};
+    BidirectionalContainer_insertBefore(&oblique_list, BidirectionalContainer_tail(&oblique_list), &against);
+    assert(((struct oblique *)BidirectionalContainer_begin(&oblique_list))->a == 1);
+    assert(((struct oblique *)BidirectionalContainer_begin(&oblique_list))->b == 1);
+    assert(((struct oblique *)BidirectionalContainer_tail(&oblique_list))->a == 3);
+    assert(((struct oblique *)BidirectionalContainer_tail(&oblique_list))->b == 3);
     /* TYPE_eraseBefore */
+    BidirectionalContainer_eraseBefore(&oblique_list, BidirectionalContainer_end(&oblique_list));
+    assert(((struct oblique *)BidirectionalContainer_tail(&oblique_list))->a == 2);
+    assert(((struct oblique *)BidirectionalContainer_tail(&oblique_list))->b == 2);
     /* bench part of benchtest */
     /* (yes that's a joke) */
     /* free memory */
