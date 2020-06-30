@@ -20,6 +20,8 @@ typedef struct dlist{
     };
     void *tail; //tail at end to maintain compatibility with slist
 } dlist;
+// not a perfect check that the anonymous struct is the same as slist, but as close as we can get
+static_assert(sizeof(slist) + sizeof(void *) == sizeof(dlist), "dlist does not correctly inherit from slist");
 
 /* forward declare internal functions called by type required interface */
 static void dlist_pushFront(void *cont, void *value);
