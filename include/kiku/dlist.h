@@ -9,10 +9,15 @@
 #include <kiku/slist.h>
 
 typedef struct dlist{
-    void *const vtable; //initialize to dlist_vtable
-    void *head;
-    size_t size;
-    const size_t elt_size;
+    union{ //to clarify that dlist inherits its structure from slist
+        slist slist; //without having to use ->slist.head
+        struct{ //thus this anonymous struct should be identical to slist
+            void *const vtable; //initialize to dlist_vtable
+            void *head;
+            size_t size;
+            const size_t elt_size;
+        };
+    };
     void *tail; //tail at end to maintain compatibility with slist
 } dlist;
 
