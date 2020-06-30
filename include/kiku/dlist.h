@@ -11,9 +11,9 @@
 typedef struct dlist{
     void *const vtable; //initialize to dlist_vtable
     void *head;
-    void *tail;
     size_t size;
     const size_t elt_size;
+    void *tail; //tail at end to maintain compatibility with slist
 } dlist;
 
 /* forward declare internal functions called by type required interface */
@@ -81,9 +81,9 @@ static inline dlist dlist_init(size_t elt_size){
     return (dlist){
         .vtable = &dlist_vtable,
         .head = NULL,
-        .tail = NULL,
         .size = 0,
-        .elt_size = elt_size
+        .elt_size = elt_size,
+        .tail = NULL
     };
 
 }

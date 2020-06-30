@@ -10,14 +10,6 @@
 
 typedef dlist clist;
 
-typedef struct clist{
-    void *const vtable; //initialize to clist_vtable
-    void *head;
-    void *tail;
-    size_t size;
-    const size_t elt_size;
-} clist;
-
 /* forward declare internal functions called by type required interface */
 static void *clist_next(void *cont, void *node);
 static void *clist_prev(void *cont, void *node);
@@ -67,7 +59,7 @@ static inline void *clist_next_internal(clist *cont, void *node){
         return cont->head;
     }
     else{
-        return dlist_next(node);
+        return slist_next((slist *)cont, node);
     }
 }
 static void *clist_next(void *cont, void *node){

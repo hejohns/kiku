@@ -10,7 +10,6 @@
 typedef struct slist{
     void *const vtable; //initialize to slist_vtable
     void *head;
-    void *tail;
     size_t size;
     const size_t elt_size;
 } slist;
@@ -67,7 +66,6 @@ static inline slist slist_init(size_t elt_size){
     return (slist){
         .vtable = &slist_vtable,
         .head = NULL,
-        .tail = NULL,
         .size = 0,
         .elt_size = elt_size
     };
