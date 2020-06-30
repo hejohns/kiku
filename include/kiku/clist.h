@@ -1,20 +1,20 @@
-// dlist.h
-#ifndef DLIST_H
-#define DLIST_H
+// clist.h
+#ifndef CLIST_H
+#define CLIST_H
 
 #include <assert.h>
 
 #include <kiku/common.h>
-#include <kiku/BidirectionalContainer.h>
-#include <kiku/slist.h>
+#include <kiku/CircularContainer.h>
+#include <kiku/dlist.h>
 
-typedef struct dlist{
-    void *const vtable; //initialize to dlist_vtable
+typedef struct clist{
+    void *const vtable; //initialize to clist_vtable
     void *head;
     void *tail;
     size_t size;
     const size_t elt_size;
-} dlist;
+} clist;
 
 /* forward declare internal functions called by type required interface */
 static void dlist_pushFront(void *cont, void *value);
@@ -30,29 +30,31 @@ static void dlist_popBack(void *cont);
 static void dlist_insertBefore(void *cont, void *node, void *value);
 static void dlist_eraseBefore(void *cont, void *node);
 
-struct dlist_vtable{
-    struct BidirectionalContainer BidirectionalContainer;
+struct clist_vtable{
+    struct CircularContainer CircularContainer;
 };
-static struct dlist_vtable dlist_vtable = {
-    .BidirectionalContainer = {
-        .DirectionalContainer = {
-            .begin = slist_begin,
-            .end = slist_end,
-            .next = slist_next,
-            .size = slist_size,
-            .pushFront = dlist_pushFront,
-            .popFront = dlist_popFront,
-            .insertAfter = dlist_insertAfter,
-            .eraseAfter = dlist_eraseAfter,
-            .merge = dlist_merge,
-            .clear = dlist_clear
-        },
-        .prev = dlist_prev,
-        .tail = dlist_tail,
-        .pushBack = dlist_pushBack,
-        .popBack = dlist_popBack,
-        .insertBefore = dlist_insertBefore,
-        .eraseBefore = dlist_eraseBefore
+static struct clist_vtable clist_vtable = {
+    .CircularContainer = {
+        .BidirectionalContainer = {
+            .DirectionalContainer = {
+                .begin = slist_begin,
+                .end = slist_end,
+                .next = clist_next,
+                .size = slist_size,
+                .pushFront = dlist_pushFront,
+                .popFront = dlist_popFront,
+                .insertAfter = dlist_insertAfter,
+                .eraseAfter = dlist_eraseAfter,
+                .merge = dlist_merge,
+                .clear = dlist_clear
+            },
+            .prev = clist_prev,
+            .tail = dlist_tail,
+            .pushBack = dlist_pushBack,
+            .popBack = dlist_popBack,
+            .insertBefore = dlist_insertBefore,
+            .eraseBefore = dlist_eraseBefore
+        }
     }
 };
 /* begin internal implementation details */
@@ -70,8 +72,8 @@ struct dlist_node{
 };
 */
 
-static inline size_t dlist_node_size_internal(dlist *cont){
-    return (cont->elt_size % sizeof(void *))?
+static inline size_t dlist_node_size_internal(dlist *cont){ 
+    return (cont->elt_size % sizeof(void *))? 
         cont->elt_size - (cont->elt_size % sizeof(void *)) + 3*sizeof(void *)
         :
         cont->elt_size + 2*sizeof(void *);
@@ -284,4 +286,5 @@ static void dlist_merge(void *cont, void *cont_other){
     dlist_merge_internal(cont, cont_other);
 }
 
-#endif /* DLIST_H */
+#endif /* CLIST_H */
+
