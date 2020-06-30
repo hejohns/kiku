@@ -9,19 +9,13 @@
 #include <kiku/slist.h>
 
 typedef struct dlist{
-    union{ //to clarify that dlist inherits its structure from slist
-        slist slist; //without having to use ->slist.head
-        struct{ //thus this anonymous struct should be identical to slist
-            void *const vtable; //initialize to dlist_vtable
-            void *head;
-            size_t size;
-            const size_t elt_size;
-        };
-    };
-    void *tail; //tail at end to maintain compatibility with slist
+#define DLIST_STRUCT                                       \
+    struct{ /* thus this anonymous struct should be identical to slist */\
+        SLIST_STRUCT                                       \
+    };                                                     \
+    void *tail; /* tail at end to maintain compatibility with slist */
+    DLIST_STRUCT
 } dlist;
-// not a perfect check that the anonymous struct is the same as slist, but as close as we can get
-static_assert(sizeof(slist) + sizeof(void *) == sizeof(dlist), "dlist does not correctly inherit from slist");
 
 /* forward declare internal functions called by type required interface */
 static void dlist_pushFront(void *cont, void *value);

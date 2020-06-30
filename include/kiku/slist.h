@@ -8,10 +8,12 @@
 #include <kiku/DirectionalContainer.h>
 
 typedef struct slist{
-    void *const vtable; //initialize to slist_vtable
-    void *head;
-    size_t size;
+#define SLIST_STRUCT                                       \
+    void *const vtable; /* initialize to slist_vtable */   \
+    void *head;                                            \
+    size_t size;                                           \
     const size_t elt_size;
+    SLIST_STRUCT
 } slist;
 
 /* forward declare internal functions called by type required interface */
