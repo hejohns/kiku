@@ -47,9 +47,9 @@ static inline clist clist_init(size_t elt_size){
     return (clist){
         .vtable = &dlist_vtable,
         .head = NULL,
-        .tail = NULL,
         .size = 0,
-        .elt_size = elt_size
+        .elt_size = elt_size,
+        .tail = NULL
     };
 
 }
@@ -71,7 +71,7 @@ static inline void *clist_prev_internal(clist *cont, void *node){
         return cont->tail;
     }
     else{
-        return dlist_prev(node);
+        return dlist_prev(cont, node);
     }
 }
 static void *clist_prev(void *cont, void *node){
@@ -79,7 +79,7 @@ static void *clist_prev(void *cont, void *node){
 }
 
 static inline void clist_free(clist *cont){
-    clist_clear(cont);
+    dlist_clear(cont);
 }
 
 #endif /* CLIST_H */
