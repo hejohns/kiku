@@ -8,6 +8,10 @@
 #error
 #endif
 
+#ifndef INIT_ARGS
+#define INIT_ARGS less_int, 16, sizeof(int)
+#endif
+
 #define CALL_HELPER2(a, b) a ## _ ## b
 #define CALL_HELPER(a, b) CALL_HELPER2(a, b)
 #define CALL(x) CALL_HELPER(TYPE, x)
@@ -17,7 +21,7 @@ static bool less_int(void *left, void *right){
 }
 
 int main(){
-    TYPE inst = CALL(init)(less_int, 16, sizeof(int));
+    TYPE inst = CALL(init)(INIT_ARGS);
     int tmp;
     srand(0);
     size_t sz = 1<<24;
