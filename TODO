@@ -1,6 +1,6 @@
-1) clean up doubleList.h
+1) clean up dlist.h
 2) by clean up I mean actually make it work for circular lists
-3) test doubleList
+3) test dlist
 4) fix up vector
 5) finally get to do fheap
 6) make benchtests type requirement specific, not realized type specific

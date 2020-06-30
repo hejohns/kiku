@@ -19,7 +19,7 @@ struct oblique{
 };
 
 int main(){
-#if defined(_doubleList) || defined(_singleList)
+#if defined(_dlist) || defined(_slist)
     TYPE int_list = CALL(init)(sizeof(int));
     TYPE double_list = CALL(init)(sizeof(double));
     TYPE oblique_list = CALL(init)(sizeof(struct oblique));

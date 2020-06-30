@@ -1,9 +1,9 @@
-// singleList.c
+// slist.c
 
 #include <assert.h>
 #include <math.h>
 
-#include <kiku/singleList.h>
+#include <kiku/slist.h>
 
 struct oblique{
     size_t a;
@@ -11,9 +11,9 @@ struct oblique{
 };
 
 int main(){
-    singleList int_list = singleList_init(sizeof(int));
-    singleList double_list = singleList_init(sizeof(double));
-    singleList oblique_list = singleList_init(sizeof(struct oblique));
+    slist int_list = slist_init(sizeof(int));
+    slist double_list = slist_init(sizeof(double));
+    slist oblique_list = slist_init(sizeof(struct oblique));
     /* basic checks */
     assert(DirectionalContainer_begin(&int_list) == DirectionalContainer_end(&int_list));
     assert(DirectionalContainer_begin(&double_list) == DirectionalContainer_end(&double_list));
@@ -21,7 +21,7 @@ int main(){
     assert(DirectionalContainer_size(&int_list) == 0);
     assert(DirectionalContainer_size(&double_list) == 0);
     assert(DirectionalContainer_size(&oblique_list) == 0);
-    /* singleList_pushFront */
+    /* slist_pushFront */
     int int_tmp;
     double double_tmp;
     struct oblique oblique_tmp;
@@ -34,7 +34,7 @@ int main(){
     oblique_tmp=(struct oblique){20, 2}, DirectionalContainer_pushFront(&oblique_list, &oblique_tmp);
     oblique_tmp=(struct oblique){10, 1}, DirectionalContainer_pushFront(&oblique_list, &oblique_tmp);
     assert(DirectionalContainer_size(&oblique_list) == 3);
-    /* singleList_next */
+    /* slist_next */
     int against = 10;
     for(void *tmp = DirectionalContainer_begin(&int_list);
             tmp != DirectionalContainer_end(&int_list);
@@ -56,10 +56,10 @@ int main(){
         assert(((struct oblique *)tmp)->a == against);
         against += 10;
     }
-    /* singleList_insertAfter */
+    /* slist_insertAfter */
     /* free memory */
-    singleList_free(&int_list);
-    singleList_free(&double_list);
-    singleList_free(&oblique_list);
+    slist_free(&int_list);
+    slist_free(&double_list);
+    slist_free(&oblique_list);
     return 0;
 }

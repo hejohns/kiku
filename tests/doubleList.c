@@ -1,7 +1,7 @@
 #include <assert.h>
 
 #include <kiku/BidirectionalContainer.h>
-#include <kiku/doubleList.h>
+#include <kiku/dlist.h>
 
 struct weird{
     int a;
@@ -12,7 +12,7 @@ struct weird{
 
 int main(){
     {
-        doubleList inst = doubleList_init(sizeof(int));
+        dlist inst = dlist_init(sizeof(int));
         int tmp;
         tmp=1, BidirectionalContainer_pushBack(&inst, &tmp);
         assert(inst.head == inst.tail);
@@ -21,10 +21,10 @@ int main(){
         assert(*(int *)BidirectionalContainer_begin(&inst) == tmp);
         assert(*(int *)BidirectionalContainer_next(&inst, BidirectionalContainer_begin(&inst)) == 1);
         assert(inst.head != inst.tail);
-        doubleList_free(&inst);
+        dlist_free(&inst);
     }
     {
-        doubleList inst = doubleList_init(sizeof(double));
+        dlist inst = dlist_init(sizeof(double));
         double tmp;
         tmp=1.5, BidirectionalContainer_pushBack(&inst, &tmp);
         assert(inst.head == inst.tail);
@@ -33,10 +33,10 @@ int main(){
         assert(*(double *)BidirectionalContainer_begin(&inst) == tmp);
         assert(*(double *)BidirectionalContainer_next(&inst, BidirectionalContainer_begin(&inst)) == 1.5);
         assert(inst.head != inst.tail);
-        doubleList_free(&inst);
+        dlist_free(&inst);
     }
     {
-        doubleList inst = doubleList_init(sizeof(struct weird));
+        dlist inst = dlist_init(sizeof(struct weird));
         struct weird tmp;
         tmp=(struct weird){8, 8, 8, 8}, BidirectionalContainer_pushBack(&inst, &tmp);
         assert(inst.head == inst.tail);
@@ -45,7 +45,7 @@ int main(){
         assert(((struct weird *)BidirectionalContainer_begin(&inst))->a == 9);
         assert((((struct weird *)BidirectionalContainer_next(&inst, BidirectionalContainer_begin(&inst)))->a == 8));
         assert(inst.head != inst.tail);
-        doubleList_free(&inst);
+        dlist_free(&inst);
     }
     return 0;
 }

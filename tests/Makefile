@@ -9,9 +9,9 @@ default:
 	make clean
 bheap.exe: bheap.c
 	$(CC) $(CFLAGS) $< -o $@
-doubleList.exe: doubleList.c
+dlist.exe: dlist.c
 	$(CC) $(CFLAGS) $< -o $@
-singleList.exe: singleList.c
+slist.exe: slist.c
 	$(CC) $(CFLAGS) $< -o $@
 staticBheap.exe: staticBheap.c
 	$(CC) $(CFLAGS) $< -o $@
