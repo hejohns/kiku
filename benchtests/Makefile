@@ -11,13 +11,10 @@ default:
 bheap: PriorityQueue.c
 	$(CC) $(CFLAGS) -DTYPE=$@ -D_$@ -include kiku/$@.h $(word 1, $^) -o $@.exe
 	valgrind --tool=memcheck ./$@.exe
-#doubleList: BidirectionalContainer.c DirectionalContainer.c
-#	$(CC) $(CFLAGS) -DTYPE=$@ -D_$@ -include kiku/$@.h $(word 1, $^) -o $@.exe
-#	valgrind --tool=memcheck ./$@.exe
-#	$(CC) $(CFLAGS) -DTYPE=$@ -D_$@ -include kiku/$@.h $(word 2, $^) -o $@.exe
-#	valgrind --tool=memcheck ./$@.exe
-doubleList: DirectionalContainer.c
+doubleList: BidirectionalContainer.c DirectionalContainer.c
 	$(CC) $(CFLAGS) -DTYPE=$@ -D_$@ -include kiku/$@.h $(word 1, $^) -o $@.exe
+	valgrind --tool=memcheck ./$@.exe
+	$(CC) $(CFLAGS) -DTYPE=$@ -D_$@ -include kiku/$@.h $(word 2, $^) -o $@.exe
 	valgrind --tool=memcheck ./$@.exe
 singleList: DirectionalContainer.c
 	$(CC) $(CFLAGS) -DTYPE=$@ -D_$@ -include kiku/$@.h $(word 1, $^) -o $@.exe

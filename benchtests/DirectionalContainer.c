@@ -37,7 +37,7 @@ int main(){
     int int_tmp;
     double double_tmp;
     struct oblique oblique_tmp;
-    int_tmp=10, DirectionalContainer_pushFront(&int_list, &int_tmp);
+    int_tmp=10, DirectionalContainer_insertAfter(&int_list, DirectionalContainer_begin(&int_list), &int_tmp);
     assert(DirectionalContainer_size(&int_list) == 1);
     assert(*(int *)DirectionalContainer_begin(&int_list) == 10);
     double_tmp=20, DirectionalContainer_pushFront(&double_list, &double_tmp);
