@@ -9,6 +9,8 @@ default:
 	make clean
 bheap.exe: bheap.c
 	$(CC) $(CFLAGS) $< -o $@
+clist.exe: clist.c
+	$(CC) $(CFLAGS) $< -o $@
 dlist.exe: dlist.c
 	$(CC) $(CFLAGS) $< -o $@
 slist.exe: slist.c
