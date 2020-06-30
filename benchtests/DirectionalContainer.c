@@ -80,6 +80,12 @@ int main(){
     /* TYPE_insertAfter */
     oblique_tmp=(struct oblique){11, 1}, DirectionalContainer_insertAfter(&oblique_list, DirectionalContainer_begin(&oblique_list), &oblique_tmp);
     oblique_tmp=(struct oblique){12, 1}, DirectionalContainer_insertAfter(&oblique_list, DirectionalContainer_next(&oblique_list, DirectionalContainer_begin(&oblique_list)), &oblique_tmp);
+    void *oblique_list_tail;
+    for(oblique_list_tail = DirectionalContainer_begin(&oblique_list);
+            DirectionalContainer_next(&oblique_list, oblique_list_tail);
+            oblique_list_tail = DirectionalContainer_next(&oblique_list, oblique_list_tail)){
+    }
+    oblique_tmp=(struct oblique){40, 4}, DirectionalContainer_insertAfter(&oblique_list, oblique_list_tail, &oblique_tmp);
     do{
         int sw=0;
         for(void *tmp = DirectionalContainer_begin(&oblique_list);
@@ -88,18 +94,30 @@ int main(){
             switch(sw){
                 case 0:
                     assert(((struct oblique *)tmp)->a == 10);
+                    assert(((struct oblique *)tmp)->b == 1);
                     break;
                 case 1:
                     assert(((struct oblique *)tmp)->a == 11);
+                    assert(((struct oblique *)tmp)->b == 1);
                     break;
                 case 2:
                     assert(((struct oblique *)tmp)->a == 12);
+                    assert(((struct oblique *)tmp)->b == 1);
                     break;
                 case 3:
                     assert(((struct oblique *)tmp)->a == 20);
+                    assert(((struct oblique *)tmp)->b == 2);
                     break;
                 case 4:
                     assert(((struct oblique *)tmp)->a == 30);
+                    assert(((struct oblique *)tmp)->b == 3);
+                    break;
+                case 5:
+                    assert(((struct oblique *)tmp)->a == 40);
+                    assert(((struct oblique *)tmp)->b == 4);
+                    break;
+                default:
+                    assert(0);
                     break;
             }
             sw++;
@@ -116,12 +134,22 @@ int main(){
             switch(sw){
                 case 0:
                     assert(((struct oblique *)tmp)->a == 10);
+                    assert(((struct oblique *)tmp)->b == 1);
                     break;
                 case 1:
                     assert(((struct oblique *)tmp)->a == 20);
+                    assert(((struct oblique *)tmp)->b == 2);
                     break;
                 case 2:
                     assert(((struct oblique *)tmp)->a == 30);
+                    assert(((struct oblique *)tmp)->b == 3);
+                    break;
+                case 3:
+                    assert(((struct oblique *)tmp)->a == 40);
+                    assert(((struct oblique *)tmp)->b == 4);
+                    break;
+                default:
+                    assert(0);
                     break;
             }
             sw++;
@@ -143,21 +171,38 @@ int main(){
             switch(sw){
                 case 0:
                     assert(((struct oblique *)tmp)->a == 10);
+                    assert(((struct oblique *)tmp)->b == 1);
                     break;
                 case 1:
                     assert(((struct oblique *)tmp)->a == 20);
+                    assert(((struct oblique *)tmp)->b == 2);
                     break;
                 case 2:
                     assert(((struct oblique *)tmp)->a == 30);
+                    assert(((struct oblique *)tmp)->b == 3);
                     break;
                 case 3:
-                    assert(((struct oblique *)tmp)->a == 30);
+                    assert(((struct oblique *)tmp)->a == 40);
+                    assert(((struct oblique *)tmp)->b == 4);
                     break;
                 case 4:
-                    assert(((struct oblique *)tmp)->a == 20);
+                    assert(((struct oblique *)tmp)->a == 40);
+                    assert(((struct oblique *)tmp)->b == 4);
                     break;
                 case 5:
+                    assert(((struct oblique *)tmp)->a == 30);
+                    assert(((struct oblique *)tmp)->b == 3);
+                    break;
+                case 6:
+                    assert(((struct oblique *)tmp)->a == 20);
+                    assert(((struct oblique *)tmp)->b == 2);
+                    break;
+                case 7:
                     assert(((struct oblique *)tmp)->a == 10);
+                    assert(((struct oblique *)tmp)->b == 1);
+                    break;
+                default:
+                    assert(0);
                     break;
             }
             sw++;
@@ -165,6 +210,8 @@ int main(){
     } while(0);
     CALL(free)(&oblique_list2);
     /* bench part of benchtest */
+    /* (yes that's a joke) */
+    assert(DirectionalContainer_size(&oblique_list) == 8);
     DirectionalContainer_clear(&oblique_list);
     for(size_t i=1; i <= 1<<20; i++){
         // abusing struct layout (struct oblique.b's are totally corrupted)
