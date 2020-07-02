@@ -65,8 +65,7 @@ static inline void BidirectionalContainer_eraseBefore(void *cont, void *node){
 /* additional functions for convenience */
 
 static inline void BidirectionalContainer_erase(void *cont, void *node){
-    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont,
-            (*(struct DirectionalContainer **)cont)->next(cont, node));
+    BidirectionalContainer_eraseBefore(cont, BidirectionalContainer_next(cont, node));
 }
 
 #endif /* BIDIRECTIONALCONTAINER_H */

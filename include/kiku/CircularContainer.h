@@ -59,8 +59,15 @@ static inline void CircularContainer_eraseBefore(void *cont, void *node){
 /* additional functions for convenience */
 
 static inline void CircularContainer_erase(void *cont, void *node){
-    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont,
-            (*(struct DirectionalContainer **)cont)->next(cont, node));
+    if(node == CircularContainer_begin(cont)){
+        CircularContainer_popFront(cont);
+    }
+    else if(node == CircularContainer_tail(cont)){
+        CircularContainer_popBack(cont);
+    }
+    else{
+        CircularContainer_eraseBefore(cont, CircularContainer_next(cont, node));
+    }
 }
 
 #endif /* CIRCULARCONTAINER_H */
