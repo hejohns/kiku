@@ -63,8 +63,7 @@ static inline void *RandomAccessContainer_at(void *cont, size_t index){
 /* additional functions for convenience */
 
 static inline void RandomAccessContainer_erase(void *cont, void *node){
-    (*(struct BidirectionalContainer **)cont)->eraseBefore(cont,
-            (*(struct DirectionalContainer **)cont)->next(cont, node));
+    RandomAccessContainer_eraseBefore(cont, RandomAccessContainer_next(cont, node));
 }
 
 #endif /* RANDOMACCESSCONTAINER_H */
