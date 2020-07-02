@@ -25,7 +25,12 @@ slist: DirectionalContainer.c
 staticBheap.exe: StaticPriorityQueue.c
 	$(CC) $(CFLAGS) -DTYPE=$@ -include kiku/$@.h $(word 1, $^) -o $@.exe
 	valgrind --tool=memcheck ./$@.exe
-vector.exe: vector.c
-	$(CC) $(CFLAGS) $< -o $@
+vector.exe: RandomAccessContainer.c BidirectionalContainer.c DirectionalContainer.c
+	$(CC) $(CFLAGS) -DTYPE=$@ -include kiku/$@.h $(word 3, $^) -o $@.exe
+	valgrind --tool=memcheck ./$@.exe
+	$(CC) $(CFLAGS) -DTYPE=$@ -include kiku/$@.h $(word 2, $^) -o $@.exe
+	valgrind --tool=memcheck ./$@.exe
+	$(CC) $(CFLAGS) -DTYPE=$@ -include kiku/$@.h $(word 1, $^) -o $@.exe
+	valgrind --tool=memcheck ./$@.exe
 clean: 
 	rm *.o *.exe
