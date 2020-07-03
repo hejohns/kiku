@@ -25,6 +25,9 @@ int main(){
     TYPE oblique_list = CALL(init)(sizeof(struct oblique));
 #endif
 #ifdef VECTOR_H
+    TYPE int_list = CALL(init)(0, sizeof(int));
+    TYPE double_list = CALL(init)(1, sizeof(double));
+    TYPE oblique_list = CALL(init)(2, sizeof(struct oblique));
 #endif
     /* basic checks */
     assert(DirectionalContainer_begin(&int_list) == DirectionalContainer_end(&int_list));
