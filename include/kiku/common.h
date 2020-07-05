@@ -14,7 +14,7 @@
  * default is as in glibc, to be safe and only use a single char buffer
  */
 static inline void memswp(void *restrict a, void *restrict b, size_t size){
-    assert(("memswp breaks on size == 0 to improve performance", size));
+    assert(((void)"memswp breaks on size == 0 to improve performance", size));
 #if !defined(__STDC_NO_VLA__) && defined(KIKU_USE_VLA)
     char tmp[size];
     memcpy(tmp, a, size);
