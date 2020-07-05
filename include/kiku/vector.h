@@ -139,7 +139,9 @@ static void vector_popFront(void *cont){
 }
 
 static inline void vector_insertAfter_internal(vector *cont, char *node, void *value){
-    assert(vector_begin(cont) <= (void *)node && node + cont->elt_size <= (char *)vector_end(cont));
+    assert(vector_begin(cont) <= (void *)node && 
+            (!cont->size || node + cont->elt_size <= (char *)vector_end(cont))
+            );
     assert(!(((char *)vector_end(cont) - node) % cont->elt_size));
     if(!(cont->size < cont->capacity)){
         vector_grow_internal(cont);
@@ -202,7 +204,7 @@ static void vector_pushBack(void *cont, void *value){
 }
 
 static void vector_popBack(void *cont){
-    assert(cont->size);
+    assert(((vector *)cont)->size);
     ((vector *)cont)->size--;
 }
 

@@ -23,11 +23,15 @@ int main(){
     TYPE int_list = CALL(init)(sizeof(int));
     TYPE double_list = CALL(init)(sizeof(double));
     TYPE oblique_list = CALL(init)(sizeof(struct oblique));
+    // for merge
+    TYPE oblique_list2 = CALL(init)(sizeof(struct oblique));
 #endif
 #ifdef VECTOR_H
     TYPE int_list = CALL(init)(0, sizeof(int));
     TYPE double_list = CALL(init)(1, sizeof(double));
     TYPE oblique_list = CALL(init)(2, sizeof(struct oblique));
+    // for merge
+    TYPE oblique_list2 = CALL(init)(0, sizeof(struct oblique));
 #endif
     /* basic checks */
     assert(DirectionalContainer_begin(&int_list) == DirectionalContainer_end(&int_list));
@@ -159,7 +163,6 @@ int main(){
         }
     } while(0);
     /* TYPE_merge */
-    TYPE oblique_list2 = CALL(init)(sizeof(struct oblique));
     for(void *tmp = DirectionalContainer_begin(&oblique_list);
             tmp != DirectionalContainer_end(&oblique_list);
             tmp = DirectionalContainer_next(&oblique_list, tmp)){
