@@ -1,7 +1,7 @@
 #include <kiku/vector.h>
 
 int main(){
-    vector inst = vector_init(8, sizeof(int));
+    vector inst = vector_init(sizeof(int), 8);
     int tmp;
     tmp=1, RandomAccessContainer_pushBack(&inst, &tmp);
     tmp=2, RandomAccessContainer_pushBack(&inst, &tmp);

@@ -68,8 +68,8 @@ static struct vector_vtable vector_vtable = {
 #define VECTOR_DEFAULT_CAPACITY 16
 
 static inline vector vector_init(
-        size_t initial_capacity,
-        size_t elt_size){
+        size_t elt_size,
+        size_t initial_capacity){
     return (vector){
         .vtable = &vector_vtable,
         .arr = kiku_malloc(initial_capacity*elt_size),

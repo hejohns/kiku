@@ -3,7 +3,7 @@
 #include <kiku/vector.h>
 
 int main(){
-    vector inst = vector_init(8, sizeof(int));
+    vector inst = vector_init(sizeof(int), 8);
     int tmp;
     size_t sz = 1<<16;
     for(size_t i=0; i<sz; i++){
