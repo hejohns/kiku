@@ -31,7 +31,7 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
 
     size_t iter = (size + 15)/16;
     register char tmp;
-    switch(size % 16){ //use power of 2 for bitmask modulo
+    switch(size & (16u-1)){ //equivalent to switch(size % 16)
         do{
         case 0: MEMSWP_SWAP;
         case 15: MEMSWP_SWAP;
