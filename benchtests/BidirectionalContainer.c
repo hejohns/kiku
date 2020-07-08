@@ -25,6 +25,9 @@ int main(){
     TYPE oblique_list = CALL(init)(sizeof(struct oblique));
 #endif
 #ifdef VECTOR_H
+    TYPE int_list = CALL(init)(sizeof(int), 0);
+    TYPE double_list = CALL(init)(sizeof(double), 1);
+    TYPE oblique_list = CALL(init)(sizeof(struct oblique), 2);
 #endif
     /* basic checks */
     assert(BidirectionalContainer_begin(&int_list) == BidirectionalContainer_end(&int_list));
@@ -60,7 +63,7 @@ int main(){
     /* TYPE_prev */
     struct oblique against = {10, 10};
     for(void *tmp = BidirectionalContainer_tail(&oblique_list);
-            tmp;
+            tmp != BidirectionalContainer_prev(&oblique_list, BidirectionalContainer_begin(&oblique_list));
             tmp = BidirectionalContainer_prev(&oblique_list, tmp)){
         assert(((struct oblique *)tmp)->a == against.a);
         assert(((struct oblique *)tmp)->b == against.b);
@@ -75,8 +78,8 @@ int main(){
         BidirectionalContainer_popBack(&oblique_list);
     }
     assert(BidirectionalContainer_size(&oblique_list) == 0);
-    assert(BidirectionalContainer_begin(&oblique_list) == NULL);
-    assert(BidirectionalContainer_tail(&oblique_list) == NULL);
+    assert(BidirectionalContainer_begin(&oblique_list) == BidirectionalContainer_end(&oblique_list));
+    assert(BidirectionalContainer_tail(&oblique_list) == BidirectionalContainer_end(&oblique_list));
     /* TYPE_insertBefore */
     against = (struct oblique){1, 1};
     BidirectionalContainer_insertBefore(&oblique_list, BidirectionalContainer_begin(&oblique_list), &against);
