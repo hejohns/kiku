@@ -68,5 +68,14 @@ static inline void BidirectionalContainer_erase(void *cont, void *node){
     BidirectionalContainer_eraseBefore(cont, BidirectionalContainer_next(cont, node));
 }
 
+static inline void *BidirectionalContainer_rbegin(void *cont){
+    if(BidirectionalContainer_size(cont)){
+        return BidirectionalContainer_prev(cont, BidirectionalContainer_begin(cont));
+    }
+    else{
+        return BidirectionalContainer_begin(cont);
+    }
+}
+
 #endif /* BIDIRECTIONALCONTAINER_H */
 

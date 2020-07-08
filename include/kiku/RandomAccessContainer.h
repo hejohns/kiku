@@ -66,4 +66,13 @@ static inline void RandomAccessContainer_erase(void *cont, void *node){
     RandomAccessContainer_eraseBefore(cont, RandomAccessContainer_next(cont, node));
 }
 
+static inline void *RandomAccessContainer_rbegin(void *cont){
+    if(RandomAccessContainer_size(cont)){
+        return RandomAccessContainer_prev(cont, RandomAccessContainer_begin(cont));
+    }
+    else{
+        return RandomAccessContainer_begin(cont);
+    }
+}
+
 #endif /* RANDOMACCESSCONTAINER_H */

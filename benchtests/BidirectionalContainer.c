@@ -63,7 +63,7 @@ int main(){
     /* TYPE_prev */
     struct oblique against = {10, 10};
     for(void *tmp = BidirectionalContainer_tail(&oblique_list);
-            tmp != BidirectionalContainer_prev(&oblique_list, BidirectionalContainer_begin(&oblique_list));
+            tmp != BidirectionalContainer_rbegin(&oblique_list);
             tmp = BidirectionalContainer_prev(&oblique_list, tmp)){
         assert(((struct oblique *)tmp)->a == against.a);
         assert(((struct oblique *)tmp)->b == against.b);
