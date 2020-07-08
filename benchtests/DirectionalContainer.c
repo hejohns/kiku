@@ -219,11 +219,11 @@ int main(){
     /* (yes that's a joke) */
     assert(DirectionalContainer_size(&oblique_list) == 8);
     DirectionalContainer_clear(&oblique_list);
-    for(size_t i=1; i <= 1<<10; i++){
+    for(size_t i=1; i <= 1<<20; i++){
         // abusing struct layout (struct oblique.b's are totally corrupted)
         DirectionalContainer_pushFront(&oblique_list, &i);
     }
-    for(size_t i=1<<10; i>0; i--){
+    for(size_t i=1<<20; i>0; i--){
         assert(((struct oblique *)DirectionalContainer_begin(&oblique_list))->a
                 == i);
         DirectionalContainer_popFront(&oblique_list);
