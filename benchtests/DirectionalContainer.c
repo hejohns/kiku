@@ -27,11 +27,11 @@ int main(){
     TYPE oblique_list2 = CALL(init)(sizeof(struct oblique));
 #endif
 #ifdef VECTOR_H
-    TYPE int_list = CALL(init)(0, sizeof(int));
-    TYPE double_list = CALL(init)(1, sizeof(double));
-    TYPE oblique_list = CALL(init)(2, sizeof(struct oblique));
+    TYPE int_list = CALL(init)(sizeof(int), 0);
+    TYPE double_list = CALL(init)(sizeof(double), 1);
+    TYPE oblique_list = CALL(init)(sizeof(struct oblique), 2);
     // for merge
-    TYPE oblique_list2 = CALL(init)(0, sizeof(struct oblique));
+    TYPE oblique_list2 = CALL(init)(sizeof(struct oblique), 0);
 #endif
     /* basic checks */
     assert(DirectionalContainer_begin(&int_list) == DirectionalContainer_end(&int_list));
@@ -89,7 +89,7 @@ int main(){
     oblique_tmp=(struct oblique){12, 1}, DirectionalContainer_insertAfter(&oblique_list, DirectionalContainer_next(&oblique_list, DirectionalContainer_begin(&oblique_list)), &oblique_tmp);
     void *oblique_list_tail;
     for(oblique_list_tail = DirectionalContainer_begin(&oblique_list);
-            DirectionalContainer_next(&oblique_list, oblique_list_tail);
+            DirectionalContainer_next(&oblique_list, oblique_list_tail) != DirectionalContainer_end(&oblique_list);
             oblique_list_tail = DirectionalContainer_next(&oblique_list, oblique_list_tail)){
     }
     oblique_tmp=(struct oblique){40, 4}, DirectionalContainer_insertAfter(&oblique_list, oblique_list_tail, &oblique_tmp);

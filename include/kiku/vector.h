@@ -130,7 +130,7 @@ static void vector_pushFront(void *cont, void *value){
 }
 
 static inline void vector_popFront_internal(vector *cont){
-    assert(cont->size);
+    assert(((void)"Nothing to pop", cont->size));
     memmove(vector_begin(cont), (char *)vector_begin(cont) + cont->elt_size, (cont->size-1)*cont->elt_size);
     cont->size--;
 }
@@ -139,15 +139,22 @@ static void vector_popFront(void *cont){
 }
 
 static inline void vector_insertAfter_internal(vector *cont, char *node, void *value){
-    assert(vector_begin(cont) <= (void *)node && 
-            (!cont->size || node + cont->elt_size <= (char *)vector_end(cont))
-            );
-    assert(!(((char *)vector_end(cont) - node) % cont->elt_size));
+    assert(((void)"node not in range",
+            vector_begin(cont) <= (void *)node &&
+            node <= (char *)vector_tail(cont)
+           ));
+    assert(((void)"node is not elt_size aligned",
+                !((node - (char *)vector_begin(cont)) % cont->elt_size)
+           ));
+    char *corrected_node = node;
     if(!(cont->size < cont->capacity)){
+        size_t offset = node - (char *)vector_begin(cont);
         vector_grow_internal(cont);
+        corrected_node = (char *)vector_begin(cont) + offset;
     }
-    memmove(node + 2*cont->elt_size, node + cont->elt_size, (char *)vector_end(cont) - node);
-    memcpy(node + cont->elt_size, value, cont->elt_size);
+    memmove(corrected_node + 2*cont->elt_size, corrected_node + cont->elt_size, (char *)vector_tail(cont) - corrected_node);
+    // allow insertAfter on begin on an empty vector (inherited quirk to be similar to slist)
+    memcpy(corrected_node + ((cont->size)? cont->elt_size : 0), value, cont->elt_size);
     cont->size++;
 }
 static void vector_insertAfter(void *cont, void *node, void *value){
@@ -155,10 +162,15 @@ static void vector_insertAfter(void *cont, void *node, void *value){
 }
 
 static inline void vector_eraseAfter_internal(vector *cont, char *node){
-    assert(cont->size);
-    assert(vector_begin(cont) <= (void *)node && node + cont->elt_size <= (char *)vector_end(cont));
-    assert(!(((char *)vector_end(cont) - node) % cont->elt_size));
-    memmove(node + cont->elt_size, node + 2*cont->elt_size, (char *)vector_end(cont) - (node + 2*cont->elt_size));
+    assert(((void)"Nothing to pop", cont->size));
+    assert(((void)"node not in range",
+            vector_begin(cont) <= (void *)node &&
+            node + cont->elt_size <= (char *)vector_tail(cont)
+           ));
+    assert(((void)"node is not elt_size aligned",
+                !((node - (char *)vector_begin(cont)) % cont->elt_size)
+           ));
+    memmove(node + cont->elt_size, node + 2*cont->elt_size, (char *)vector_tail(cont) - (node + cont->elt_size));
     cont->size--;
 }
 static void vector_eraseAfter(void *cont, void *node){
@@ -166,12 +178,14 @@ static void vector_eraseAfter(void *cont, void *node){
 }
 
 static inline void vector_merge_internal(vector *cont, vector *cont_other){
-    assert(cont->elt_size == cont_other->elt_size);
+    assert(((void)"I don't think you want to merge these two",
+                cont->elt_size == cont_other->elt_size
+                ));
     if(!(cont->size + cont_other->size < cont->capacity)){
         cont->arr = kiku_realloc(cont->arr, (cont->size + cont_other->size)*cont->elt_size);
         cont->capacity = cont->size + cont_other->size;
     }
-    memcpy(vector_end(cont), vector_begin(cont_other), cont_other->size);
+    memcpy(vector_end(cont), vector_begin(cont_other), cont_other->size*cont->elt_size);
     cont->size += cont_other->size;
     vector_clear(cont_other);
 }
@@ -204,28 +218,41 @@ static void vector_pushBack(void *cont, void *value){
 }
 
 static void vector_popBack(void *cont){
-    assert(((vector *)cont)->size);
+    assert(((void)"Nothing to pop", ((vector *)cont)->size));
     ((vector *)cont)->size--;
 }
 
 static inline void vector_insertBefore_internal(vector *cont, char *node, void *value){
+    assert(((void)"node not in range",
+            (char *)vector_begin(cont) <= node &&
+            node <= (char *)vector_end(cont)
+           ));
+    assert(((void)"node is not elt_size aligned",
+                !((node - (char *)vector_begin(cont)) % cont->elt_size)
+           ));
+    char *corrected_node = node;
     if(!(cont->size < cont->capacity)){
+        size_t offset = node - (char *)vector_begin(cont);
         vector_grow_internal(cont);
+        corrected_node = (char *)vector_begin(cont) + offset;
     }
-    assert(!(((char *)vector_end(cont) - node) % cont->elt_size));
-    memmove(node + cont->elt_size, node, (char *)vector_end(cont) - node);
-    memcpy(node, value, cont->elt_size);
+    memmove(corrected_node + cont->elt_size, corrected_node, (char *)vector_end(cont) - corrected_node);
+    memcpy(corrected_node, value, cont->elt_size);
     cont->size++;
 }
 static void vector_insertBefore(void *cont, void *node, void *value){
-    assert(vector_begin(cont) <= node && node <= vector_end(cont));
     vector_insertBefore_internal(cont, node, value);
 }
 
 static inline void vector_eraseBefore_internal(vector *cont, char *node){
-    assert(cont->size);
-    assert((char *)vector_begin(cont) + cont->elt_size <= node && (void *)node <= vector_end(cont));
-    assert(!(((char *)vector_end(cont) - node) % cont->elt_size));
+    assert(((void)"Nothing to pop", cont->size));
+    assert(((void)"node not in range",
+            (char *)vector_begin(cont) + cont->elt_size <= node && 
+            node <= (char *)vector_end(cont)
+           ));
+    assert(((void)"node is not elt_size aligned",
+                !((node - (char *)vector_begin(cont)) % cont->elt_size)
+           ));
     memmove(node - cont->elt_size, node, (char *)vector_end(cont) - node);
     cont->size--;
 }
