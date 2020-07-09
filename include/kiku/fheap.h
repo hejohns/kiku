@@ -52,11 +52,11 @@ static struct fheap_vtable fheap_vtable{
 struct fheap_node{
     char datum[elt_size];
     clist *parent_list;
-    void *parent;
+    void *parent; //points to node in parent_list
     clist children; //size_t degree == CircularContainer_size(&children)
     bool mark;
-};
-*/
+}; //sizeof(struct fheap_node) - datum and w/o padding + clist_node overhead: (5 pointers + 2 size_t + bool) + (2 pointers)
+*/ //sizeof(struct CLRS_fheap_node) - datum and w/o padding: 4 pointers + size_t + bool
 
 static inline size_t fheap_init_node_size_internal(size_t elt_size){
     return (elt_size % sizeof(void *))?
