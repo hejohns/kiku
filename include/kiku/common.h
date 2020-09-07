@@ -15,23 +15,29 @@
  */
 static inline void memswp(void *restrict a, void *restrict b, size_t size){
     assert(((void)"memswp breaks on size == 0 to improve performance", size));
-#if !defined(__STDC_NO_VLA__) && defined(KIKU_USE_VLA)
+#if defined(KIKU_USE_VLA)
+#  if defined(__STDC_NO_VLA__)
+#  error "compiler does not support VLA"
+#  endif
     char tmp[size];
     memcpy(tmp, a, size);
     memcpy(a, b, size);
     memcpy(b, tmp, size);
 #elif defined(KIKU_USE_DUFFS)
-#define MEMSWP_SWAP                                    \
-    tmp = *(char *)a;                                  \
-    *(char *)a = *(char *)b;                           \
-    a = (char *)a + 1;                                 \
-    *(char *)b = tmp;                                  \
-    b = (char *)b + 1;                                 \
-    (void)0
+#  if defined(MEMSWP_SWAP)
+#  error "MEMSWP_SWAP should not be defined outside of here"
+#  endif
+#define MEMSWP_SWAP                                        \
+    tmp = *(char *)a;                                      \
+    *(char *)a = *(char *)b;                               \
+    a = (char *)a + 1;                                     \
+    *(char *)b = tmp;                                      \
+    b = (char *)b + 1;                                     \
+    (void)0 /* force semicolon w/o do/white(0) loop */
 
     size_t iter = (size + 15)/16;
     register char tmp;
-    switch(size & (16u-1)){ //equivalent to switch(size % 16)
+    switch(size & (16U-1)){ //equivalent to switch(size % 16)
         do{
         case 0: MEMSWP_SWAP;
         case 15: MEMSWP_SWAP;
@@ -66,28 +72,30 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
 
 static inline void *kiku_malloc(size_t size){
     void *tmp = malloc(size);
-    if(!tmp && size){
-        exit(EXIT_FAILURE);
-    }
+    assert(((void)"malloc failed", !tmp && size));
     return tmp;
+}
+
+/* usage is different than stdlib's free()
+ *
+ * void *ptr = kiku_malloc(1);     vs     void *ptr = malloc(1);
+ * kiku_free(&ptr);                       free(ptr), ptr = NULL;
+ */
+static inline void kiku_free(void **ptr){
+    free(*ptr);
+    *ptr = NULL;
 }
 
 static inline void *kiku_calloc(size_t nmemb, size_t size){
     void *tmp = calloc(nmemb, size);
-    if(!tmp && nmemb && size){
-        exit(EXIT_FAILURE);
-    }
+    assert(((void)"calloc failed", !tmp && nmemb && size));
     return tmp;
 }
 
 static inline void *kiku_realloc(void *ptr, size_t size){
     void *tmp = realloc(ptr, size);
-    if(tmp){
-        return tmp;
-    }
-    else{
-        exit(EXIT_FAILURE);
-    }
+    assert(((void)"calloc failed", tmp));
+    return tmp;
 }
 
 #endif /* COMMON_H */
