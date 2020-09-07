@@ -8,8 +8,10 @@
 
 /* define KIKU_USE_VLA to use vla/memcpy for memswp
  *
+ * define KIKU_USE_STATIC_BUF to use a static char buffer
+ * of size KIKU_MEMSWP_BUFSIZ chars
+ *
  * define KIKU_USE_DUFFS to use duff's device for memswp
- * May be slightly faster when types to be swapped are larger
  *
  * default is as in glibc, to be safe and only use a single char buffer
  */
@@ -20,6 +22,15 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
 #  error "compiler does not support VLA"
 #  endif
     char tmp[size];
+    memcpy(tmp, a, size);
+    memcpy(a, b, size);
+    memcpy(b, tmp, size);
+#elif defined(KIKU_USE_STATIC_BUF)
+#  if !defined(KIKU_MEMSWP_BUFSIZ)
+#  error "must define a non-zero size for KIKU_MEMSWP_BUFSIZ"
+#  endif
+    static char tmp[KIKU_MEMSWP_BUFSIZ];
+    assert(((void)"KIKU_MEMSWP_BUFSIZ exceeded", KIKU_MEMSWP_BUFSIZ >= size));
     memcpy(tmp, a, size);
     memcpy(a, b, size);
     memcpy(b, tmp, size);
