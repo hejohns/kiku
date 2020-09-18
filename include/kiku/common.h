@@ -45,7 +45,7 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
     a = (char *)a + 1;                                     \
     *(char *)b = tmp;                                      \
     b = (char *)b + 1;                                     \
-    (void)0 /* force semicolon w/o do/white(0) loop */
+    (void)0 /* force semicolon w/o do/while(0) loop */
 
     size_t iter = (size + 15)/16;
     register char tmp;
