@@ -17,14 +17,14 @@ static bool less_int(void *left, void *right){
 }
 
 int main(){
-#ifdef bheap
+#ifdef BHEAP_H
     TYPE inst = CALL(init)(less_int, 16, sizeof(int));
 #endif
 #ifdef staticBheap
 #endif
     int tmp;
     srand(0);
-    size_t sz = 1<<24;
+    size_t sz = 1<<20;
     for(size_t i=0; i<sz; i++){
         tmp = rand()%100;
         PriorityQueue_push(&inst, &tmp);

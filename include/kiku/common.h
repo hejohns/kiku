@@ -22,7 +22,12 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
 #  if !defined(KIKU_MEMSWP_BUFSIZ)
 #  error "must define a non-zero size for KIKU_MEMSWP_BUFSIZ"
 #  endif
-    static char tmp[KIKU_MEMSWP_BUFSIZ];
+#  warning "Using KIKU_USE_STATIC_BUF"
+static_assert(
+        KIKU_MEMSWP_BUFSIZ / sizeof(size_t) > 0,
+        "KIKU_MEMSWP_BUFSIZ needs to be at least sizeof(size_t)"
+        );
+    static size_t tmp[KIKU_MEMSWP_BUFSIZ / sizeof(size_t)];
     assert(((void)"KIKU_MEMSWP_BUFSIZ exceeded", KIKU_MEMSWP_BUFSIZ >= size));
     memcpy(tmp, a, size);
     memcpy(a, b, size);
@@ -31,6 +36,7 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
 #  if defined(__STDC_NO_VLA__)
 #  error "compiler does not support VLA"
 #  endif
+#  warning "Using KIKU_USE_VLA"
     char tmp[size];
     memcpy(tmp, a, size);
     memcpy(a, b, size);
@@ -39,6 +45,7 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
 #  if defined(MEMSWP_SWAP)
 #  error "MEMSWP_SWAP should not be defined outside of here"
 #  endif
+#  warning "Using KIKU_USE_DUFFS"
 #define MEMSWP_SWAP                                        \
     tmp = *(char *)a;                                      \
     *(char *)a = *(char *)b;                               \
@@ -71,6 +78,7 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
     }
 #undef MEMSWP_SWAP
 #else
+#warning "Using default (slow) memswp"
     register char tmp;
     do{
         tmp = *(char *)a;
@@ -84,7 +92,7 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
 
 static inline void *kiku_malloc(size_t size){
     void *tmp = malloc(size);
-    assert(((void)"malloc failed", !tmp && size));
+    assert(((void)"malloc failed", !(!tmp && size)));
     return tmp;
 }
 
@@ -100,13 +108,13 @@ static inline void kiku_free(void **ptr){
 
 static inline void *kiku_calloc(size_t nmemb, size_t size){
     void *tmp = calloc(nmemb, size);
-    assert(((void)"calloc failed", !tmp && nmemb && size));
+    assert(((void)"calloc failed", !(!tmp && nmemb && size)));
     return tmp;
 }
 
 static inline void *kiku_realloc(void *ptr, size_t size){
     void *tmp = realloc(ptr, size);
-    assert(((void)"calloc failed", tmp));
+    assert(((void)"realloc failed", !(!tmp && size)));
     return tmp;
 }
 

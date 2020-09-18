@@ -1,5 +1,6 @@
 CC := clang
 CFLAGS := -std=c11 -Wpedantic -Wall -Wextra -ggdb -O3
+CFLAGS += -DKIKU_USE_STATIC_BUF -DKIKU_MEMSWP_BUFSIZ=64
 
 export CPATH := ../include:
 
