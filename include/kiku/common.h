@@ -3,6 +3,7 @@
 #define COMMON_H
 
 #include <stdlib.h>
+#include <stdalign.h>
 #include <string.h>
 #include <assert.h>
 
@@ -23,11 +24,8 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
 #  error "must define a non-zero size for KIKU_MEMSWP_BUFSIZ"
 #  endif
 #  warning "Using KIKU_USE_STATIC_BUF"
-static_assert(
-        KIKU_MEMSWP_BUFSIZ / sizeof(size_t) > 0,
-        "KIKU_MEMSWP_BUFSIZ needs to be at least sizeof(size_t)"
-        );
-    static size_t tmp[KIKU_MEMSWP_BUFSIZ / sizeof(size_t)];
+    alignas(alignof(size_t)) /* try to align to words */
+    static char tmp[KIKU_MEMSWP_BUFSIZ];
     assert(((void)"KIKU_MEMSWP_BUFSIZ exceeded", KIKU_MEMSWP_BUFSIZ >= size));
     memcpy(tmp, a, size);
     memcpy(a, b, size);
