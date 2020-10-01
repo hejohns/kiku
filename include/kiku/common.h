@@ -8,8 +8,10 @@
 #include <assert.h>
 #include <stdarg.h>
 
-#ifdef __GNUC__
-#elif
+#if !defined(__STRICT_ANSI__) && defined(__GNUC__)
+#  warning "using gcc attributes"
+#else
+#  warning "disabling gcc attributes"
 #  define __attribute__(x) /* mask attributes for non-gnuc compilers */
 #endif
 
