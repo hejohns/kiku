@@ -6,6 +6,7 @@
 #include <stdalign.h>
 #include <string.h>
 #include <assert.h>
+#include <stdarg.h>
 
 /* 
  * define KIKU_USE_STATIC_BUF to use a static char buffer
@@ -94,6 +95,24 @@ static inline void *kiku_malloc(size_t size){
     return tmp;
 }
 
+static inline void *kiku_malloc_c(
+        size_t size,
+        void *(*callback)(va_list),
+        ...
+        ){
+    va_list ap;
+    va_start(ap, callback);
+    void *tmp = malloc(size);
+    if(!tmp && size){
+        // malloc failed
+        return callback(ap);
+    }
+    else{
+        // malloc okay
+        return tmp;
+    }
+}
+
 /* usage is different than stdlib's free()
  *
  * void *ptr = kiku_malloc(1);     vs     void *ptr = malloc(1);
@@ -110,10 +129,47 @@ static inline void *kiku_calloc(size_t nmemb, size_t size){
     return tmp;
 }
 
+static inline void *kiku_calloc_c(
+        size_t nmemb,
+        size_t size,
+        void *(*callback)(va_list),
+        ...
+        ){
+    va_list ap;
+    va_start(ap, callback);
+    void *tmp = calloc(nmemb, size);
+    if(!tmp && nmemb && size){
+        // calloc failed
+        return callback(ap);
+    }
+    else{
+        // calloc okay
+        return tmp;
+    }
+}
+
 static inline void *kiku_realloc(void *ptr, size_t size){
     void *tmp = realloc(ptr, size);
     assert(((void)"realloc failed", !(!tmp && size)));
     return tmp;
 }
 
+static inline void *kiku_realloc_c(
+        void *ptr,
+        size_t size,
+        void *(*callback)(va_list),
+        ...
+        ){
+    va_list ap;
+    va_start(ap, callback);
+    void *tmp = realloc(ptr, size);
+    if(!tmp && size){
+        // realloc failed
+        return callback(ap);
+    }
+    else{
+        // realloc okay
+        return tmp;
+    }
+}
 #endif /* COMMON_H */
