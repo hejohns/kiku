@@ -8,6 +8,11 @@
 #include <assert.h>
 #include <stdarg.h>
 
+#ifdef __GNUC__
+#elif
+#  define __attribute__(x) /* mask attributes for non-gnuc compilers */
+#endif
+
 /* 
  * define KIKU_USE_STATIC_BUF to use a static char buffer
  * of size KIKU_MEMSWP_BUFSIZ chars
@@ -89,12 +94,14 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
 #endif
 }
 
+__attribute__((malloc))
 static inline void *kiku_malloc(size_t size){
     void *tmp = malloc(size);
     assert(((void)"malloc failed", !(!tmp && size)));
     return tmp;
 }
 
+__attribute__((malloc))
 static inline void *kiku_malloc_c(
         size_t size,
         void *(*callback)(va_list),
@@ -123,12 +130,14 @@ static inline void kiku_free(void **ptr){
     *ptr = NULL;
 }
 
+__attribute__((malloc))
 static inline void *kiku_calloc(size_t nmemb, size_t size){
     void *tmp = calloc(nmemb, size);
     assert(((void)"calloc failed", !(!tmp && nmemb && size)));
     return tmp;
 }
 
+__attribute__((malloc))
 static inline void *kiku_calloc_c(
         size_t nmemb,
         size_t size,
