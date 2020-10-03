@@ -25,7 +25,7 @@
  *
  * default is as in glibc, to be safe and only use a single char buffer
  */
-static inline void memswp(void *restrict a, void *restrict b, size_t size){
+static void memswp(void *restrict a, void *restrict b, size_t size){
     assert(((void)"memswp breaks on size == 0 to improve performance", size));
 #if defined(KIKU_USE_STATIC_BUF)
 #  if !defined(KIKU_MEMSWP_BUFSIZ)
@@ -97,14 +97,14 @@ static inline void memswp(void *restrict a, void *restrict b, size_t size){
 }
 
 __attribute__((malloc))
-static inline void *kiku_malloc(size_t size){
+static void *kiku_malloc(size_t size){
     void *tmp = malloc(size);
     assert(((void)"malloc failed", !(!tmp && size)));
     return tmp;
 }
 
 __attribute__((malloc))
-static inline void *kiku_malloc_c(
+static void *kiku_malloc_c(
         size_t size,
         void *(*callback)(va_list),
         ...
@@ -127,20 +127,20 @@ static inline void *kiku_malloc_c(
  * void *ptr = kiku_malloc(1);     vs     void *ptr = malloc(1);
  * kiku_free(&ptr);                       free(ptr), ptr = NULL;
  */
-static inline void kiku_free(void **ptr){
+static void kiku_free(void **ptr){
     free(*ptr);
     *ptr = NULL;
 }
 
 __attribute__((malloc))
-static inline void *kiku_calloc(size_t nmemb, size_t size){
+static void *kiku_calloc(size_t nmemb, size_t size){
     void *tmp = calloc(nmemb, size);
     assert(((void)"calloc failed", !(!tmp && nmemb && size)));
     return tmp;
 }
 
 __attribute__((malloc))
-static inline void *kiku_calloc_c(
+static void *kiku_calloc_c(
         size_t nmemb,
         size_t size,
         void *(*callback)(va_list),
@@ -159,13 +159,13 @@ static inline void *kiku_calloc_c(
     }
 }
 
-static inline void *kiku_realloc(void *ptr, size_t size){
+static void *kiku_realloc(void *ptr, size_t size){
     void *tmp = realloc(ptr, size);
     assert(((void)"realloc failed", !(!tmp && size)));
     return tmp;
 }
 
-static inline void *kiku_realloc_c(
+static void *kiku_realloc_c(
         void *ptr,
         size_t size,
         void *(*callback)(va_list),
